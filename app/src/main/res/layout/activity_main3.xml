@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tag.photocaptureandgallery.Main3Activity">
+
+    <ImageView
+        android:id="@+id/iView"
+        android:layout_width="383dp"
+        android:layout_height="477dp"
+        android:layout_marginBottom="-457dp"
+        app:layout_constraintBottom_toTopOf="@+id/iButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="-2dp" />
+
+    <Button
+        android:id="@+id/iButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:text="Scan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/iRotate"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="-8dp"
+        android:text="Rotate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/cropButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="5dp"
+        android:text="Crop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.777"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/tiltRight"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="10dp"
+        android:text="Right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tiltLeft" />
+
+    <Button
+        android:id="@+id/tiltLeft"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:text="left"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

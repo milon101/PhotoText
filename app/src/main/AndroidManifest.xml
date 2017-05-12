@@ -31,7 +31,9 @@
             android:exported="true" />
         <activity android:name="com.tag.photocaptureandgallery.TextActivity" />
         <activity android:name="com.tag.photocaptureandgallery.Main2Activity" />
-        <activity android:name="com.tag.photocaptureandgallery.SaveActivity"></activity>
+        <activity android:name="com.tag.photocaptureandgallery.SaveActivity" />
+        <activity android:name="com.tag.photocaptureandgallery.Main3Activity" />
+        <activity android:name="com.tag.photocaptureandgallery.CropActivity"></activity>
     </application>
 
 </manifest>

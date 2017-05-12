@@ -26,8 +26,11 @@ import java.io.IOException;
 public class Ocr2 extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
-    Button next;
+    Button next,rotateButton;
     String TAG = "MAIN ACTIVITY";
+    Uri uri;
+    Bitmap bitmap;
+    ImageView imageView;
 
 
     @Override
@@ -35,12 +38,29 @@ public class Ocr2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr2);
 
-        imageProcess();
         next = (Button) findViewById(R.id.upload_btn1);
+        rotateButton=(Button)findViewById(R.id.rotateButton);
+        imageView = (ImageView) findViewById(R.id.imgView);
+        uri = TextClass.sUri;
+
+        bitmap = TextClass.sbitmap;
+        if(bitmap.getHeight()<bitmap.getWidth())
+            bitmap= RotateBitmap(bitmap,90);
+
+        imageView.setImageBitmap(bitmap);
+
+        rotateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bitmap=RotateBitmap(bitmap,90);
+                imageView.setImageBitmap(bitmap);
+            }
+        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imageProcess();
                 Intent intent = new Intent(getApplicationContext(), TextActivity.class);
                 startActivity(intent);
             }
@@ -50,15 +70,10 @@ public class Ocr2 extends AppCompatActivity {
     }
 
     public void imageProcess() {
-        Uri uri = TextClass.sUri;
 
-        Bitmap bitmap = TextClass.sbitmap;
-        if(bitmap.getHeight()<bitmap.getWidth())
-            bitmap= RotateBitmap(bitmap,90);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imgView);
 
-        imageView.setImageBitmap(bitmap);
+
 
         // imageBitmap is the Bitmap image you're trying to process for text
         if (bitmap != null) {

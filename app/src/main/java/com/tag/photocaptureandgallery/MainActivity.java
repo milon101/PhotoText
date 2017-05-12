@@ -1,9 +1,5 @@
 package com.tag.photocaptureandgallery;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -128,29 +124,9 @@ public class MainActivity extends Activity {
         if(TextClass.sbitmap.getHeight()<TextClass.sbitmap.getWidth())
             TextClass.sbitmap= RotateBitmap(TextClass.sbitmap,90);
 
+		//ivImage.setImageBitmap(TextClass.sbitmap);
 
-//		Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//		thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-//
-//		File destination = new File(Environment.getExternalStorageDirectory(),
-//				System.currentTimeMillis() + ".jpg");
-//
-//		FileOutputStream fo;
-//		try {
-//			destination.createNewFile();
-//			fo = new FileOutputStream(destination);
-//			fo.write(bytes.toByteArray());
-//			fo.close();
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-		ivImage.setImageBitmap(TextClass.sbitmap);
-
-        Intent intent=new Intent(getApplicationContext(),Main2Activity.class);
+        Intent intent=new Intent(getApplicationContext(),Main3Activity.class);
         startActivity(intent);
 	}
 

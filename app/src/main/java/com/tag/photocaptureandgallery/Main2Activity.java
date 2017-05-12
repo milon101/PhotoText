@@ -70,25 +70,6 @@ public class Main2Activity extends AppCompatActivity {
         });
     }
 
-    public void createPdf(View view) {
-        Document doc = new Document();
-        File folder = new File(Environment.getExternalStorageDirectory() +
-                File.separator + "OCR");
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        String outpsth = "/sdcard/OCR/mine1.pdf";
-        try {
-            PdfWriter.getInstance(doc, new FileOutputStream(outpsth));
-            doc.open();
-            doc.add(new Paragraph(TextClass.stringBuilder.toString()));
-            doc.close();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void cameraProcess(){
         try {
@@ -121,8 +102,8 @@ public class Main2Activity extends AppCompatActivity {
                 } else {
 //                    scanResults.setText(scanResults.getText() + "Blocks: " + "\n");
 //                    scanResults.setText(scanResults.getText() + blocks + "\n");
-//                    scanResults.setText(scanResults.getText() + "---------" + "\n");
-                    scanResults.setText(scanResults.getText() + "Lines: " + "\n");
+////                    scanResults.setText(scanResults.getText() + "---------" + "\n");
+//                    scanResults.setText(scanResults.getText() + "Lines: " + "\n");
                     scanResults.setText(scanResults.getText() + lines + "\n");
                     TextClass.stringBuilder.append(lines);
                     TextClass.stringBuilder.append("\n");
@@ -141,115 +122,4 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_WRITE_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    takePicture();
-                } else {
-                    Toast.makeText(Main2Activity.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-                }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PHOTO_REQUEST && resultCode == RESULT_OK) {
-            launchMediaScanIntent();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-//                if(bitmap.getHeight()<bitmap.getWidth())
-//                    bitmap= RotateBitmap(bitmap,90);
-
-                if (detector.isOperational() && bitmap != null) {
-                    Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-                    SparseArray<TextBlock> textBlocks = detector.detect(frame);
-                    String blocks = "";
-                    String lines = "";
-                    String words = "";
-                    for (int index = 0; index < textBlocks.size(); index++) {
-                        //extract scanned text blocks here
-                        TextBlock tBlock = textBlocks.valueAt(index);
-                        blocks = blocks + tBlock.getValue() + "\n" + "\n";
-                        for (Text line : tBlock.getComponents()) {
-                            //extract scanned text lines here
-                            lines = lines + line.getValue() + "\n";
-                            for (Text element : line.getComponents()) {
-                                //extract scanned text words here
-                                words = words + element.getValue() + ", ";
-                            }
-                        }
-                    }
-                    if (textBlocks.size() == 0) {
-                        scanResults.setText("Scan Failed: Found nothing to scan");
-                    } else {
-                        scanResults.setText(scanResults.getText() + "Blocks: " + "\n");
-                        scanResults.setText(scanResults.getText() + blocks + "\n");
-                        scanResults.setText(scanResults.getText() + "---------" + "\n");
-                        scanResults.setText(scanResults.getText() + "Lines: " + "\n");
-                        scanResults.setText(scanResults.getText() + lines + "\n");
-                        scanResults.setText(scanResults.getText() + "---------" + "\n");
-                        scanResults.setText(scanResults.getText() + "Words: " + "\n");
-                        scanResults.setText(scanResults.getText() + words + "\n");
-                        scanResults.setText(scanResults.getText() + "---------" + "\n");
-                    }
-                } else {
-                    scanResults.setText("Could not set up the detector!");
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "Failed to load Image", Toast.LENGTH_SHORT)
-                        .show();
-                Log.e(LOG_TAG, e.toString());
-            }
-        }
-    }
-
-    private void takePicture() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(), "picture.jpg");
-        imageUri = Uri.fromFile(photo);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, PHOTO_REQUEST);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        if (imageUri != null) {
-            outState.putString(SAVED_INSTANCE_URI, imageUri.toString());
-            outState.putString(SAVED_INSTANCE_RESULT, scanResults.getText().toString());
-        }
-        super.onSaveInstanceState(outState);
-    }
-
-    private void launchMediaScanIntent() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediaScanIntent.setData(imageUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-
-    private Bitmap decodeBitmapUri(Context ctx, Uri uri) throws FileNotFoundException {
-        int targetW = 600;
-        int targetH = 600;
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(ctx.getContentResolver().openInputStream(uri), null, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = 1;
-
-        return BitmapFactory.decodeStream(ctx.getContentResolver()
-                .openInputStream(uri), null, bmOptions);
-    }
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
-    {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
 }
