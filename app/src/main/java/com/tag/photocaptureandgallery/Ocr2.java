@@ -1,10 +1,10 @@
 package com.tag.photocaptureandgallery;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import android.net.Uri;
 import com.example.takeimage.R;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
@@ -25,12 +25,11 @@ import java.io.IOException;
 
 public class Ocr2 extends AppCompatActivity {
 
-    private static int RESULT_LOAD_IMAGE = 1;
-    Button next,rotateButton;
+    Button next, rotateButton, leftButton, rightButton, crop;
     String TAG = "MAIN ACTIVITY";
-    Uri uri;
-    Bitmap bitmap;
     ImageView imageView;
+    Uri uri;
+    Intent CrIntent;
 
 
     @Override
@@ -38,22 +37,23 @@ public class Ocr2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr2);
 
+        leftButton = (Button) findViewById(R.id.leftButton);
+        rightButton = (Button) findViewById(R.id.rightButton);
+        crop = (Button) findViewById(R.id.crop);
         next = (Button) findViewById(R.id.upload_btn1);
-        rotateButton=(Button)findViewById(R.id.rotateButton);
+        rotateButton = (Button) findViewById(R.id.rotateButton);
         imageView = (ImageView) findViewById(R.id.imgView);
-        uri = TextClass.sUri;
 
-        bitmap = TextClass.sbitmap;
-        if(bitmap.getHeight()<bitmap.getWidth())
-            bitmap= RotateBitmap(bitmap,90);
+        if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
+            TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
 
-        imageView.setImageBitmap(bitmap);
+        imageView.setImageBitmap(TextClass.sbitmap);
 
         rotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bitmap=RotateBitmap(bitmap,90);
-                imageView.setImageBitmap(bitmap);
+                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
+                imageView.setImageBitmap(TextClass.sbitmap);
             }
         });
 
@@ -66,29 +66,42 @@ public class Ocr2 extends AppCompatActivity {
             }
         });
 
+        crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uri=TextClass.sUri;
+                CropImage();
+            }
+        });
+
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, -1.0f);
+                imageView.setImageBitmap(TextClass.sbitmap);
+            }
+        });
+
+        rightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 1.0f);
+                imageView.setImageBitmap(TextClass.sbitmap);
+            }
+        });
 
     }
 
+
     public void imageProcess() {
 
-
-
-
-
         // imageBitmap is the Bitmap image you're trying to process for text
-        if (bitmap != null) {
+        if (TextClass.sbitmap != null) {
 
             TextRecognizer textRecognizer = new TextRecognizer.Builder(this).build();
 
             if (!textRecognizer.isOperational()) {
-                // Note: The first time that an app using a Vision API is installed on a
-                // device, GMS will download a native libraries to the device in order to do detection.
-                // Usually this completes before the app is run for the first time.  But if that
-                // download has not yet completed, then the above call will not detect any text,
-                // barcodes, or faces.
-                // isOperational() can be used to check if the required native libraries are currently
-                // available.  The detectors will automatically become operational once the library
-                // downloads complete on device.
+
                 Log.w(TAG, "Detector dependencies are not yet available.");
 
                 // Check for low storage.  If there is low storage, the native library will not be
@@ -104,7 +117,7 @@ public class Ocr2 extends AppCompatActivity {
 
 
             Frame imageFrame = new Frame.Builder()
-                    .setBitmap(bitmap)
+                    .setBitmap(TextClass.sbitmap)
                     .build();
 
             SparseArray<TextBlock> textBlocks = textRecognizer.detect(imageFrame);
@@ -118,27 +131,50 @@ public class Ocr2 extends AppCompatActivity {
                 TextClass.stringBuilder.append(text);
                 TextClass.stringBuilder.append("\n");
 
-//                        List<? extends Text> textComponents = textBlock.getComponents();
-//                        for(Text currentText : textComponents) {
-//                            TextClass.stringBuilder.append(currentText.getValue());
-//                            TextClass.stringBuilder.append("\n");
-//                        }
-//
-//                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-
-//
-//                    if (textBlocks.size() != 0) {
-//                        //textView.post(new Runnable() {
-//                        //@Override
-//                        // public void run() {
-//                        TextClass.stringBuilder = new StringBuilder();
-//                        for (int i = 0; i < textBlocks.size(); ++i) {
-//                            TextBlock item = textBlocks.valueAt(i);
-//                            TextClass.stringBuilder.append(item.getValue());
-//                            TextClass.stringBuilder.append("\n");
-//                        }
-//                        //textView.setText(TextClass.stringBuilder.toString());
             }
+
+        }
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            Log.w("no00",TextClass.sUri.toString());
+            if (data != null) {
+                Log.w("no00",TextClass.sUri.toString());
+                Log.w("h","ok");
+                Bundle bundle = data.getExtras();
+                TextClass.sbitmap = bundle.getParcelable("data");
+                try {
+                    TextClass.sbitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), TextClass.sUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imageView.setImageBitmap(TextClass.sbitmap);
+            }
+        }
+    }
+
+    private void CropImage() {
+
+        try {
+            CrIntent = new Intent("com.android.camera.action.CROP");
+            if (TextClass.sUri!=null)
+                Log.w("no",TextClass.sUri.toString());
+            CrIntent.setDataAndType(TextClass.sUri, "image/*");
+
+            CrIntent.putExtra("crop", "true");
+            CrIntent.putExtra("outputX", 900);
+            CrIntent.putExtra("outputY", 900);
+//            CropIntent.putExtra("aspectX", 3);
+//            CropIntent.putExtra("aspectY", 4);
+            //CropIntent.putExtra("scaleUpIfNeeded", true);
+            CrIntent.putExtra("return-data", true);
+            CrIntent.putExtra(MediaStore.EXTRA_OUTPUT, TextClass.sUri);
+            startActivityForResult(CrIntent, 1);
+        } catch (ActivityNotFoundException ex) {
 
         }
 

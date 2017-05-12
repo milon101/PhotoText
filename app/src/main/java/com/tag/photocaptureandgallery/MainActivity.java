@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,6 +28,7 @@ public class MainActivity extends Activity {
 	private Button btnSelect;
 	private ImageView ivImage;
 	private String userChoosenTask;
+	Intent CrIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -133,10 +136,12 @@ public class MainActivity extends Activity {
 	@SuppressWarnings("deprecation")
 	private void onSelectFromGalleryResult(Intent data) {
 
-		TextClass.sUri = data.getData();
 		if (data != null) {
             try {
+				Log.w("no","Null");
+				TextClass.sUri = data.getData();
                 TextClass.sbitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+				//CropImage();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -153,5 +158,27 @@ public class MainActivity extends Activity {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
+	private void CropImage() {
+
+		try {
+			CrIntent = new Intent("com.android.camera.action.CROP");
+			CrIntent.setDataAndType(TextClass.sUri, "image/*");
+
+			CrIntent.putExtra("crop", "true");
+			CrIntent.putExtra("outputX", 900);
+			CrIntent.putExtra("outputY", 900);
+//            CropIntent.putExtra("aspectX", 3);
+//            CropIntent.putExtra("aspectY", 4);
+			//CropIntent.putExtra("scaleUpIfNeeded", true);
+			CrIntent.putExtra("return-data", true);
+			CrIntent.putExtra(MediaStore.EXTRA_OUTPUT, TextClass.sUri);
+
+			startActivityForResult(CrIntent, 1);
+		} catch (ActivityNotFoundException ex) {
+
+		}
+
+	}
 
 }

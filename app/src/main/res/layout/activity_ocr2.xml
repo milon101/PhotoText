@@ -14,20 +14,45 @@
 
     <Button
         android:id="@+id/upload_btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scan"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="17dp" />
+        android:layout_marginEnd="10dp"
+        android:text="Scan" />
 
     <Button
         android:id="@+id/rotateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:text="Rotate"
-        android:layout_marginStart="29dp" />
+        android:layout_marginRight="5dp"
+        android:text="Rotate" />
+
+    <Button
+        android:id="@+id/crop"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/upload_btn1"
+        android:text="crop" />
+
+    <Button
+        android:id="@+id/rightButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:layout_toStartOf="@+id/crop"
+        android:text="right" />
+
+    <Button
+        android:id="@+id/leftButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/rotateButton"
+        android:text="left" />
 
 </RelativeLayout>

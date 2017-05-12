@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -61,7 +62,7 @@ public class Main3Activity extends AppCompatActivity {
         tiltLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, -1);
+                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, -1.0f);
                 iView.setImageBitmap(TextClass.sbitmap);
             }
         });
@@ -69,7 +70,7 @@ public class Main3Activity extends AppCompatActivity {
         tiltRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 1);
+                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 1.0f);
                 iView.setImageBitmap(TextClass.sbitmap);
             }
         });
@@ -86,6 +87,7 @@ public class Main3Activity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (data != null) {
+                Log.w("h","ok");
                 Bundle bundle = data.getExtras();
                 TextClass.sbitmap = bundle.getParcelable("data");
                 try {
