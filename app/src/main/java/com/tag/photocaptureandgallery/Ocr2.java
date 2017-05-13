@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.net.Uri;
+
 import com.example.takeimage.R;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
@@ -69,7 +70,7 @@ public class Ocr2 extends AppCompatActivity {
         crop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uri=TextClass.sUri;
+                uri = TextClass.sUri;
                 CropImage();
             }
         });
@@ -141,10 +142,10 @@ public class Ocr2 extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            Log.w("no00",TextClass.sUri.toString());
+            Log.w("no00", TextClass.sUri.toString());
             if (data != null) {
-                Log.w("no00",TextClass.sUri.toString());
-                Log.w("h","ok");
+                Log.w("no00", TextClass.sUri.toString());
+                Log.w("h", "ok");
                 Bundle bundle = data.getExtras();
                 TextClass.sbitmap = bundle.getParcelable("data");
                 try {
@@ -161,8 +162,8 @@ public class Ocr2 extends AppCompatActivity {
 
         try {
             CrIntent = new Intent("com.android.camera.action.CROP");
-            if (TextClass.sUri!=null)
-                Log.w("no",TextClass.sUri.toString());
+            if (TextClass.sUri != null)
+                Log.w("no", TextClass.sUri.toString());
             CrIntent.setDataAndType(TextClass.sUri, "image/*");
 
             CrIntent.putExtra("crop", "true");

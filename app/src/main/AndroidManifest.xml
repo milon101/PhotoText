@@ -33,7 +33,8 @@
         <activity android:name="com.tag.photocaptureandgallery.Main2Activity" />
         <activity android:name="com.tag.photocaptureandgallery.SaveActivity" />
         <activity android:name="com.tag.photocaptureandgallery.Main3Activity" />
-        <activity android:name="com.tag.photocaptureandgallery.CropActivity"></activity>
+        <activity android:name="com.tag.photocaptureandgallery.CropActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

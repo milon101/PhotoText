@@ -16,10 +16,9 @@
         android:id="@+id/upload_btn1"
         android:layout_width="70dp"
         android:layout_height="40dp"
+        android:text="Scan"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:text="Scan" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/rotateButton"
@@ -34,25 +33,26 @@
         android:id="@+id/crop"
         android:layout_width="70dp"
         android:layout_height="40dp"
+        android:text="crop"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/upload_btn1"
-        android:text="crop" />
+        android:layout_toEndOf="@+id/rightButton" />
 
     <Button
         android:id="@+id/rightButton"
         android:layout_width="70dp"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
         android:layout_marginRight="5dp"
-        android:layout_toStartOf="@+id/crop"
-        android:text="right" />
+        android:text="right"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/leftButton"
         android:layout_width="70dp"
         android:layout_height="40dp"
+        android:layout_marginRight="5dp"
+        android:text="left"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/rotateButton"
-        android:text="left" />
+        android:layout_toStartOf="@+id/rightButton" />
 
 </RelativeLayout>
