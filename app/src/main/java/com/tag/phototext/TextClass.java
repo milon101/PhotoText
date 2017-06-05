@@ -1,4 +1,4 @@
-package com.tag.photocaptureandgallery;
+package com.tag.phototext;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

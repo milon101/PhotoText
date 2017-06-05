@@ -1,6 +1,9 @@
-package com.tag.photocaptureandgallery;
+package com.tag.phototext;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +20,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.takeimage.R;
@@ -25,16 +28,18 @@ import com.example.takeimage.R;
 public class MainActivity extends Activity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private Button btnSelect;
+    private ImageButton btnSelect;
     private ImageView ivImage;
     private String userChoosenTask;
     Intent CrIntent, GalIntent;
+
+    String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnSelect = (Button) findViewById(R.id.btnSelectPhoto);
+        btnSelect = (ImageButton) findViewById(R.id.btnSelectPhoto);
         btnSelect.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -42,7 +47,7 @@ public class MainActivity extends Activity {
                 selectImage();
             }
         });
-        ivImage = (ImageView) findViewById(R.id.ivImage);
+        //ivImage = (ImageView) findViewById(R.id.ivImage);
     }
 
     @Override
@@ -51,7 +56,11 @@ public class MainActivity extends Activity {
             case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (userChoosenTask.equals("Take Photo"))
-                        cameraIntent();
+                        try {
+                            cameraIntent();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     else if (userChoosenTask.equals("Choose from Library"))
                         galleryIntent();
                 } else {
@@ -75,7 +84,11 @@ public class MainActivity extends Activity {
                 if (items[item].equals("Take Photo")) {
                     userChoosenTask = "Take Photo";
                     if (result)
-                        cameraIntent();
+                        try {
+                            cameraIntent();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                 } else if (items[item].equals("Choose from Library")) {
                     userChoosenTask = "Choose from Library";
@@ -103,9 +116,45 @@ public class MainActivity extends Activity {
         startActivityForResult(Intent.createChooser(GalIntent, "Select Image from Gallery"), SELECT_FILE);
     }
 
-    private void cameraIntent() {
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+
+    private void cameraIntent() throws IOException {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = Uri.fromFile(createImageFile());
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(intent, REQUEST_CAMERA);
+            }
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//        startActivityForResult(intent, REQUEST_CAMERA);
+        }
     }
 
     @Override
@@ -122,8 +171,8 @@ public class MainActivity extends Activity {
 
     private void onCaptureImageResult(Intent data) {
         try {
-            TextClass.sUri = data.getData();
-            TextClass.sbitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+            TextClass.sUri = Uri.parse(mCurrentPhotoPath);
+            TextClass.sbitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), TextClass.sUri);
         } catch (IOException e) {
             e.printStackTrace();
         }

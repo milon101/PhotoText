@@ -5,7 +5,7 @@ android {
     buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "com.example.takeimage"
+        applicationId "com.example.phototext"
         minSdkVersion 19
         targetSdkVersion 23
     }
@@ -24,6 +24,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
     compile 'com.google.android.gms:play-services-vision:10.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'

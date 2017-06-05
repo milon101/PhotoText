@@ -1,14 +1,12 @@
-package com.tag.photocaptureandgallery;
+package com.tag.phototext;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.takeimage.R;
 import com.itextpdf.text.Document;
@@ -20,26 +18,27 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import static android.R.attr.data;
+public class TextActivity extends AppCompatActivity {
 
-public class SaveActivity extends AppCompatActivity {
-
-    EditText save;
-    ImageButton finalSave;
+    EditText editText;
+    int len;
+    ImageButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_save);
-        save = (EditText) findViewById(R.id.saveName);
-        finalSave = (ImageButton) findViewById(R.id.finalSave);
-        finalSave.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_text);
+        editText = (EditText) findViewById(R.id.editText);
+        editText.setText(null);
+        button = (ImageButton) findViewById(R.id.saveButton);
+        len = TextClass.stringBuilder.toString().length();
+        editText.setText(TextClass.stringBuilder.toString());
+        editText.setSelection(editText.getText().length());
+
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createPdf(view);
-                Toast.makeText(getApplicationContext(), "Saved",
-                        Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SaveActivity.class);
                 startActivity(intent);
             }
         });
@@ -49,12 +48,11 @@ public class SaveActivity extends AppCompatActivity {
     public void createPdf(View view) {
         Document doc = new Document();
         File folder = new File(Environment.getExternalStorageDirectory() +
-                File.separator + "OCR");
+                File.separator + "TollCulator");
         if (!folder.exists()) {
             folder.mkdirs();
         }
-
-        String outpsth = "/sdcard/OCR/" + save.getText() + ".pdf";
+        String outpsth = "/sdcard/OCR/mine1.pdf";
         try {
             PdfWriter.getInstance(doc, new FileOutputStream(outpsth));
             doc.open();
