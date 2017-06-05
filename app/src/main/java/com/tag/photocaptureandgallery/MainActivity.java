@@ -133,7 +133,7 @@ public class MainActivity extends Activity {
 
         //ivImage.setImageBitmap(TextClass.sbitmap);
 
-        Intent intent = new Intent(getApplicationContext(), Main3Activity.class);
+        Intent intent = new Intent(getApplicationContext(), Ocr2.class);
         startActivity(intent);
     }
 

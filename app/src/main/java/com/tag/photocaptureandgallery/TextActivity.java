@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.takeimage.R;
 import com.itextpdf.text.Document;
@@ -22,7 +23,7 @@ public class TextActivity extends AppCompatActivity {
 
     EditText editText;
     int len;
-    Button button;
+    ImageButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class TextActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text);
         editText = (EditText) findViewById(R.id.editText);
         editText.setText(null);
-        button = (Button) findViewById(R.id.saveButton);
+        button = (ImageButton) findViewById(R.id.saveButton);
         len = TextClass.stringBuilder.toString().length();
         editText.setText(TextClass.stringBuilder.toString());
         editText.setSelection(editText.getText().length());

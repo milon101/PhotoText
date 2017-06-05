@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.takeimage.R;
@@ -24,21 +25,21 @@ import static android.R.attr.data;
 public class SaveActivity extends AppCompatActivity {
 
     EditText save;
-    Button finalSave;
+    ImageButton finalSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save);
         save = (EditText) findViewById(R.id.saveName);
-        finalSave = (Button) findViewById(R.id.finalSave);
+        finalSave = (ImageButton) findViewById(R.id.finalSave);
         finalSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createPdf(view);
                 Toast.makeText(getApplicationContext(), "Saved",
                         Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -53,7 +54,7 @@ public class SaveActivity extends AppCompatActivity {
             folder.mkdirs();
         }
 
-        String outpsth = "/sdcard/OCR/"+save.getText()+".pdf";
+        String outpsth = "/sdcard/OCR/" + save.getText() + ".pdf";
         try {
             PdfWriter.getInstance(doc, new FileOutputStream(outpsth));
             doc.open();

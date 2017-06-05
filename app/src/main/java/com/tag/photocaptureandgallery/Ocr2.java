@@ -12,6 +12,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.net.Uri;
@@ -26,7 +27,7 @@ import java.io.IOException;
 
 public class Ocr2 extends AppCompatActivity {
 
-    Button next, rotateButton, leftButton, rightButton, crop;
+    ImageButton next, rotateButton, leftButton, rightButton, crop;
     String TAG = "MAIN ACTIVITY";
     ImageView imageView;
     Uri uri;
@@ -38,11 +39,11 @@ public class Ocr2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr2);
 
-        leftButton = (Button) findViewById(R.id.leftButton);
-        rightButton = (Button) findViewById(R.id.rightButton);
-        crop = (Button) findViewById(R.id.crop);
-        next = (Button) findViewById(R.id.upload_btn1);
-        rotateButton = (Button) findViewById(R.id.rotateButton);
+        leftButton = (ImageButton) findViewById(R.id.leftButton);
+        rightButton = (ImageButton) findViewById(R.id.rightButton);
+        crop = (ImageButton) findViewById(R.id.crop);
+        next = (ImageButton) findViewById(R.id.upload_btn1);
+        rotateButton = (ImageButton) findViewById(R.id.rotateButton);
         imageView = (ImageView) findViewById(R.id.imgView);
 
         if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
