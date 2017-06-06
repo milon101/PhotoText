@@ -31,15 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.tag.phototext.Ocr2"
-            android:exported="true" />
-        <activity android:name="com.tag.phototext.TextActivity" />
-        <activity android:name="com.tag.phototext.Main2Activity" />
-        <activity android:name="com.tag.phototext.SaveActivity" />
-        <activity
-            android:name="com.tag.phototext.CropActivity"
-            android:exported="true" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -53,6 +44,10 @@
 
         <activity android:name="com.tag.phototext.MainActivity"
             android:exported="true"></activity>
+        <activity android:name="com.tag.phototext.Main2Activity"/>
+        <activity android:name="com.tag.phototext.Main3Activity"/>
+        <activity android:name="com.tag.phototext.Ocr2"/>
+        <activity android:name="com.tag.phototext.TextActivity"/>
     </application>
 
 </manifest>
