@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FCFFF4"
     tools:context="com.tag.phototext.TextActivity">
 
 
@@ -38,8 +37,8 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -57,15 +56,18 @@
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:text="md"
             app:layout_constraintRight_toRightOf="parent"
             tools:layout_constraintLeft_creator="1"
             tools:layout_constraintRight_creator="1"
-            tools:layout_editor_absoluteY="-176dp" />
+            tools:layout_editor_absoluteY="-113dp" />
 
 
     </ScrollView>
+
+
 
 
 </android.support.constraint.ConstraintLayout>
