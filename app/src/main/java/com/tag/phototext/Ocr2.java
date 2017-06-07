@@ -25,7 +25,7 @@ import java.io.IOException;
 
 public class Ocr2 extends AppCompatActivity {
 
-    ImageButton next, rotateButton, leftButton, rightButton, crop;
+    ImageButton next;
     String TAG = "MAIN ACTIVITY";
     ImageView imageView;
     Uri uri;
@@ -37,25 +37,15 @@ public class Ocr2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr2);
 
-        leftButton = (ImageButton) findViewById(R.id.leftButton);
-        rightButton = (ImageButton) findViewById(R.id.rightButton);
-        crop = (ImageButton) findViewById(R.id.crop);
         next = (ImageButton) findViewById(R.id.upload_btn1);
-        rotateButton = (ImageButton) findViewById(R.id.rotateButton);
+
         imageView = (ImageView) findViewById(R.id.imgView);
 
-        if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
-            TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
+//        if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
+//            TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
 
         imageView.setImageBitmap(TextClass.sbitmap);
 
-        rotateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
-                imageView.setImageBitmap(TextClass.sbitmap);
-            }
-        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,30 +53,6 @@ public class Ocr2 extends AppCompatActivity {
                 imageProcess();
                 Intent intent = new Intent(getApplicationContext(), TextActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        crop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uri = TextClass.sUri;
-                CropImage();
-            }
-        });
-
-        leftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, -1.0f);
-                imageView.setImageBitmap(TextClass.sbitmap);
-            }
-        });
-
-        rightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 1.0f);
-                imageView.setImageBitmap(TextClass.sbitmap);
             }
         });
 
@@ -155,29 +121,6 @@ public class Ocr2 extends AppCompatActivity {
                 imageView.setImageBitmap(TextClass.sbitmap);
             }
         }
-    }
-
-    private void CropImage() {
-
-        try {
-            CrIntent = new Intent("com.android.camera.action.CROP");
-            if (TextClass.sUri != null)
-                Log.w("no", TextClass.sUri.toString());
-            CrIntent.setDataAndType(TextClass.sUri, "image/*");
-
-            CrIntent.putExtra("crop", "true");
-            CrIntent.putExtra("outputX", 900);
-            CrIntent.putExtra("outputY", 900);
-//            CropIntent.putExtra("aspectX", 3);
-//            CropIntent.putExtra("aspectY", 4);
-            //CropIntent.putExtra("scaleUpIfNeeded", true);
-            CrIntent.putExtra("return-data", true);
-            CrIntent.putExtra(MediaStore.EXTRA_OUTPUT, TextClass.sUri);
-            startActivityForResult(CrIntent, 1);
-        } catch (ActivityNotFoundException ex) {
-
-        }
-
     }
 
 

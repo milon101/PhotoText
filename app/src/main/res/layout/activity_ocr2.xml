@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FCFFF4"
     tools:context="com.tag.phototext.Ocr2">
 
     <RelativeLayout
@@ -25,67 +26,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
 
-
-        <ImageButton
-            android:id="@+id/crop"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/rightButton"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:tint="#1ABFDF"
-            android:src="@drawable/ic_crop_button"
-            android:text="crop" />
-
-        <ImageButton
-            android:id="@+id/rotateButton"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:src="@drawable/ic_rotate_button"
-            android:text="Scan"
-            android:tint="#1ABFDF" />
-
-
-
-        <ImageButton
-            android:id="@+id/rightButton"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:src="@drawable/ic_right_button"
-            android:text="right"
-            android:tint="#1ABFDF" />
-
-        <ImageButton
-            android:id="@+id/leftButton"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/rightButton"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:tint="#1ABFDF"
-            android:src="@drawable/ic_left_button"
-            android:text="left" />
-
-
         <ImageButton
             android:id="@+id/upload_btn1"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_weight="1"
             android:background="#00000000"
-            android:tint="#1ABFDF"
-            android:src="@drawable/ic_ok_button"
-            android:text="Rotate" />
+            android:padding="6dp"
+            android:src="@drawable/ic_scan_icon"
+            android:text="Rotate"
+            android:tint="#1ABFDF" />
     </LinearLayout>
 
 

@@ -16,9 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:tint="#D7DF21"
             android:background="#00000000"
             android:padding="5dp"
-            android:src="@drawable/ic_infobutton" />
+            android:src="@drawable/ic_info" />
     </RelativeLayout>
 
     <LinearLayout
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#FCFFF4"
-            android:src="@drawable/ic_camerabutton1" />
+            android:src="@drawable/ic_camerabutton" />
     </LinearLayout>
 
     <LinearLayout

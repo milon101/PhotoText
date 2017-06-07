@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.takeimage.R;
+import com.kyo.imagecrop.CropUtils;
 
 public class MainActivity extends Activity {
 
@@ -164,8 +165,9 @@ public class MainActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
+            else if (requestCode == REQUEST_CAMERA) {
                 onCaptureImageResult(data);
+            }
         }
     }
 
@@ -176,14 +178,15 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        startCropper(REQUEST_CAMERA, data);
 
         if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
             TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
 
         //ivImage.setImageBitmap(TextClass.sbitmap);
 
-        Intent intent = new Intent(getApplicationContext(), Ocr2.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), Ocr2.class);
+//        startActivity(intent);
     }
 
     @SuppressWarnings("deprecation")
@@ -194,6 +197,7 @@ public class MainActivity extends Activity {
                 Log.w("no", "Null");
                 TextClass.sUri = data.getData();
                 TextClass.sbitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                startCropper(SELECT_FILE, data);
                 //CropImage();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -201,8 +205,8 @@ public class MainActivity extends Activity {
         }
 //
 //		ivImage.setImageBitmap(bitmap);
-        Intent intent = new Intent(getApplicationContext(), Ocr2.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), Ocr2.class);
+//        startActivity(intent);
     }
 
     public static Bitmap RotateBitmap(Bitmap source, float angle) {
@@ -231,6 +235,24 @@ public class MainActivity extends Activity {
 
         }
 
+    }
+
+
+    private void startCropper(int requestCode, Intent data) {
+        Uri uri = null;
+        if (requestCode == REQUEST_CAMERA) {
+            uri = TextClass.sUri;
+        } else if (data != null && data.getData() != null) {
+            uri = TextClass.sUri;
+        } else {
+            return;
+        }
+        Intent intent = new Intent(this, CropActivity.class);
+        intent.setData(uri);
+        intent.putExtra("outputX", CropUtils.dip2px(this, 300));
+        intent.putExtra("outputY", CropUtils.dip2px(this, 150));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        startActivity(intent);
     }
 
 }

@@ -29,7 +29,7 @@ public class SaveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save);
         save = (EditText) findViewById(R.id.editText);
-        finalSave = (ImageButton) findViewById(R.id.saveButton);
+        finalSave = (ImageButton) findViewById(R.id.finalSave);
         finalSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

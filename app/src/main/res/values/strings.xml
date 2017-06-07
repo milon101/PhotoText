@@ -3,5 +3,6 @@
 
     <string name="app_name">Photo Text</string>
     <string name="hello_world">Hello world!</string>
+    <string name="done">Done</string>
 
 </resources>
