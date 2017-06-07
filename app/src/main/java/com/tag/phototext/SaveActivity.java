@@ -28,13 +28,13 @@ public class SaveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save);
-        save = (EditText) findViewById(R.id.editText);
+        save = (EditText) findViewById(R.id.saveName);
         finalSave = (ImageButton) findViewById(R.id.finalSave);
         finalSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createPdf(view);
-                Toast.makeText(getApplicationContext(), "Saved",
+                Toast.makeText(getApplicationContext(), "Saved to Photo Text",
                         Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
@@ -46,12 +46,12 @@ public class SaveActivity extends AppCompatActivity {
     public void createPdf(View view) {
         Document doc = new Document();
         File folder = new File(Environment.getExternalStorageDirectory() +
-                File.separator + "OCR");
+                File.separator + "Photo Text");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
-        String outpsth = "/sdcard/OCR/"+save.getText()+".pdf";
+        String outpsth = "/sdcard/Photo Text/"+save.getText()+".pdf";
         try {
             PdfWriter.getInstance(doc, new FileOutputStream(outpsth));
             doc.open();

@@ -32,14 +32,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:tint="#008790"
             android:background="#FCFFF4"
-            android:src="@drawable/ic_camerabutton" />
+            android:src="@drawable/ic_camerabutton"
+            android:tint="#008790" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"></LinearLayout>
+        android:layout_weight=".20"></LinearLayout>
 
 </LinearLayout>
