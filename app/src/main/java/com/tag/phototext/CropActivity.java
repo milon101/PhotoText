@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.takeimage.R;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.codec.Base64;
 import com.kyo.imagecrop.CropLayout;
 import com.kyo.imagecrop.CropUtils;
@@ -40,32 +41,66 @@ public class CropActivity extends Activity {
     private CropLayout mCropLayout;
     private ImageButton mDoneButton;
     Intent cropIntent;
+    String outputFormat;
+
+    ImageButton imageButton11, imageButton43, imageButton169;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_crop);
 
+        imageButton11 = (ImageButton) findViewById(R.id.imageButton11);
+        imageButton43 = (ImageButton) findViewById(R.id.imageButton43);
+        imageButton169 = (ImageButton) findViewById(R.id.imageButton169);
+
         Intent intent = getIntent();
         if (intent == null) {
             return;
         }
 
-        Uri sourceUri = intent.getData();
+        final Uri sourceUri = intent.getData();
         int outputX = intent
                 .getIntExtra("outputX", CropUtils.dip2px(this, 200));
         int outputY = intent
                 .getIntExtra("outputY", CropUtils.dip2px(this, 200));
-        String outputFormat = intent.getStringExtra("outputFormat");
+        outputFormat = intent.getStringExtra("outputFormat");
 
         mDoneButton = (ImageButton) this.findViewById(R.id.done);
         mDoneButton.setOnClickListener(mOnClickListener);
+
 
         // bellow
         mCropLayout = (CropLayout) this.findViewById(R.id.crop);
         mCropLayout.setOnCropListener(mOnCropListener);
         mCropLayout.startCropImage(sourceUri, outputX, outputY);
         mCropLayout.setOutputFormat(outputFormat);
+
+        imageButton11.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCropLayout.startCropImage(sourceUri, 720, 720);
+                mCropLayout.setOutputFormat(outputFormat);
+            }
+        });
+
+        imageButton43.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCropLayout.startCropImage(sourceUri, 1280, 960);
+                mCropLayout.setOutputFormat(outputFormat);
+            }
+        });
+
+        imageButton169.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCropLayout.startCropImage(sourceUri, 1280, 720);
+                mCropLayout.setOutputFormat(outputFormat);
+            }
+        });
+
+
     }
 
     private OnClickListener mOnClickListener = new OnClickListener() {

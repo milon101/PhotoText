@@ -11,4 +11,5 @@ public class TextClass {
     static StringBuilder stringBuilder;
     static Uri sUri;
     static Bitmap sbitmap;
+    static int cropSize;
 }

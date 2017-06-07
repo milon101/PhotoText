@@ -51,7 +51,7 @@ public class Ocr2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 imageProcess();
-                Intent intent = new Intent(getApplicationContext(), TextActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TextViewActivity.class);
                 startActivity(intent);
             }
         });
