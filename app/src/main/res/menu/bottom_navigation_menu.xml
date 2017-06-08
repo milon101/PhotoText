@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_Gal"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_gal"
+        android:title="Gallery"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_Cam"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_camera"
+        android:title="Camera"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_Histotry"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_name"
+        android:title="Previous"
+        app:showAsAction="ifRoom" />
+
+
+</menu>
