@@ -4,17 +4,17 @@
 
 
     <item
-        android:id="@+id/action_Gal"
+        android:id="@+id/action_Gal_surf"
         android:enabled="true"
         android:icon="@drawable/ic_action_gal"
         android:title="Gallery"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_Cam"
+        android:id="@+id/action_Histotry_surf"
         android:enabled="true"
-        android:icon="@drawable/ic_action_camera"
-        android:title="Camera"
+        android:icon="@drawable/ic_action_name"
+        android:title="Previous"
         app:showAsAction="ifRoom" />
 
     <item

@@ -39,6 +39,7 @@ public class MainnnActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final GridView gv = (GridView) findViewById(R.id.gv);
+        gv.setAdapter(new CustomAdapter(MainnnActivity.this, getPDFs()));
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -48,24 +49,25 @@ public class MainnnActivity extends AppCompatActivity {
                         GalleryOpen();
                         break;
 
-                    case R.id.action_Histotry:
+                    case R.id.action_settings:
                         break;
 
                     case R.id.action_Cam:
+                        startActivity(new Intent(MainnnActivity.this,CameraActivity.class));
                         break;
                 }
                 return true;
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gv.setAdapter(new CustomAdapter(MainnnActivity.this, getPDFs()));
-
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                gv.setAdapter(new CustomAdapter(MainnnActivity.this, getPDFs()));
+//
+//            }
+//        });
     }
 
     private ArrayList<PDFDoc> getPDFs()
@@ -73,7 +75,7 @@ public class MainnnActivity extends AppCompatActivity {
     {
         ArrayList<PDFDoc> pdfDocs = new ArrayList<>();
         //TARGET FOLDER
-        File downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File downloadsFolder = new File(Environment.getExternalStorageDirectory() + File.separator + "Photo Text");
 
         PDFDoc pdfDoc;
 

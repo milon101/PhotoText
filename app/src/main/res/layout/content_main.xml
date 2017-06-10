@@ -20,7 +20,6 @@
             android:layout_height="429dp"
             android:numColumns="2" />
 
-
     </LinearLayout>
 
     <LinearLayout
