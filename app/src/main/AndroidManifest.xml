@@ -59,6 +59,8 @@
         <activity
             android:name="com.tag.phototext.CameraActivity"
             android:exported="true" />
+        <activity android:name="com.tag.phototext.CameraTestActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

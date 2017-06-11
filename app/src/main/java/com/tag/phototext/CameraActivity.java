@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CameraActivity extends AppCompatActivity implements Camera.AutoFocusCallback {
+public class CameraActivity extends AppCompatActivity {
 
     SurfaceView cameraView;
     CameraSource cameraSource;
@@ -307,10 +307,5 @@ public class CameraActivity extends AppCompatActivity implements Camera.AutoFocu
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-    @Override
-    public void onAutoFocus(boolean success, Camera camera) {
-
     }
 }
