@@ -15,14 +15,19 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -33,25 +38,26 @@ import com.kyo.imagecrop.CropUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class CameraTestActivity extends Activity {
+public class CameraTestActivity extends AppCompatActivity {
 
     private static String LOGTAG = "CameraActivity";
     Intent data;
-    boolean boo=false;
+    boolean boo = false;
     RelativeLayout.LayoutParams fullScreenParams;
     int fullWidth = 0;
     int fullHeight = 0;
     Intent GalIntent;
     BottomNavigationView bottomNavigation;
-    private int SELECT_FILE = 1, REQUEST_CAMERA = 0,SELECT_CAMERA_FILE = 1;
+    private int SELECT_FILE = 1, REQUEST_CAMERA = 0, SELECT_CAMERA_FILE = 1;
 
     FloatingActionButton floatingActionButton;
 
     private CameraUtils mCamUtils = null;
     private Button capturePic = null;
-    private Button flipCamera = null;
-    private Button cameraFlash = null;
+    private ImageButton flipCamera = null;
+    private ImageButton cameraFlash = null;
     private RelativeLayout cameraLayout = null;
+    private Toolbar toolbar;
 
     private LinearLayout parentView;
 
@@ -106,7 +112,8 @@ public class CameraTestActivity extends Activity {
 
         @Override
         public void flashSet(String flashMode) {
-            cameraFlash.setText(flashMode);
+            if(flashMode.equalsIgnoreCase("on"))
+            cameraFlash.set(flashMode);
 
         }
 
@@ -137,18 +144,22 @@ public class CameraTestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
         ActionBar actionBar = getActionBar();
-        if (null != actionBar)
-            actionBar.hide();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        toolbar=(Toolbar)findViewById(R.id.toolbar_camera);
+        setSupportActionBar(toolbar);
+
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//
+//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//
+//        View decorView = getWindow().getDecorView();
+//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//        // Remember that you should never show the action bar if the
+//        // status bar is hidden, so hide that too if necessary.
+//        ActionBar actionBar = getActionBar();
+//        if (null != actionBar)
+//            actionBar.hide();
 
         setContentView(R.layout.activity_test);
 
@@ -157,11 +168,11 @@ public class CameraTestActivity extends Activity {
         capturePic.setVisibility(View.VISIBLE);
         capturePic.setOnClickListener(OnCapture);
 
-        flipCamera = (Button) findViewById(R.id.button_flip);
+        flipCamera = (ImageButton) findViewById(R.id.button_flip);
         flipCamera.setVisibility(View.VISIBLE);
         flipCamera.setOnClickListener(OnFlip);
 
-        cameraFlash = (Button) findViewById(R.id.button_flash);
+        cameraFlash = (ImageButton) findViewById(R.id.button_flash);
         cameraFlash.setVisibility(View.VISIBLE);
         cameraFlash.setOnClickListener(OnFlashClick);
 
@@ -186,24 +197,11 @@ public class CameraTestActivity extends Activity {
 		/* Hide flip camera button if only one camera a available */
         mCamUtils.handleFlipVisibility();
 
-        if(boo==false){
-            TextClass.sUri=mCamUtils.clickPicture();
-            boo=true;
-        }
-        floatingActionButton=(FloatingActionButton)findViewById(R.id.surface_float_test);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.surface_float_test);
         floatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextClass.sUri=mCamUtils.clickPicture();
-                try {
-                    if(TextClass.sUri!=null) {
-                        TextClass.sbitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), TextClass.sUri);
-                        startCropper(SELECT_CAMERA_FILE, data);
-                        Log.w(LOGTAG,"Uri Found");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                mCamUtils.clickPicture();
             }
         });
 
@@ -232,6 +230,11 @@ public class CameraTestActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main2, menu);
+        return true;
+    }
 
     private void GalleryOpen() {
         GalIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -271,10 +274,10 @@ public class CameraTestActivity extends Activity {
 
     private void startCropper(int requestCode, Intent data) {
         Uri uri = null;
-        uri=TextClass.sUri;
+        uri = TextClass.sUri;
         if (requestCode == REQUEST_CAMERA) {
             uri = TextClass.sUri;
-        } else if (uri != null ) {
+        } else if (uri != null) {
             uri = TextClass.sUri;
         }
         Intent intent = new Intent(getApplicationContext(), CropActivity.class);
@@ -284,7 +287,7 @@ public class CameraTestActivity extends Activity {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         startActivity(intent);
 
-        Log.w(LOGTAG,"Uri Found starto");
+        Log.w(LOGTAG, "Uri Found starto");
 
     }
 
@@ -407,7 +410,7 @@ public class CameraTestActivity extends Activity {
                     mdisplayWidth = temp;
                 }
                    /*
-				    * Surface view should be like this
+                    * Surface view should be like this
 				    * 		___________________________
 				    * 	   |		    16			   |
 				    * 	   |						   |
@@ -435,7 +438,7 @@ public class CameraTestActivity extends Activity {
                     mdisplayHeight = mdisplayWidth;
                     mdisplayWidth = temp;
                 }
-				   
+
 				   /*
 				    * Surface view should be like this
 				    * 		_______________

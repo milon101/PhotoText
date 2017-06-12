@@ -17,14 +17,21 @@ package com.tag.phototext;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.takeimage.R;
 import com.itextpdf.text.Image;
@@ -42,7 +49,13 @@ public class CropActivity extends Activity {
     private ImageButton mDoneButton;
     Intent cropIntent;
     String outputFormat;
-
+    public static int mOrientation;
+    private CameraUtils mCamUtils = null;
+    private LinearLayout parentView;
+    RelativeLayout.LayoutParams fullScreenParams;
+    int fullWidth = 0;
+    int fullHeight = 0;
+    private static String LOGTAG = "CameraActivity";
     ImageButton imageButton11, imageButton43, imageButton169;
 
     @Override
@@ -58,6 +71,8 @@ public class CropActivity extends Activity {
         if (intent == null) {
             return;
         }
+
+        mOrientation = this.getResources().getConfiguration().orientation;
 
         final Uri sourceUri = intent.getData();
         int outputX = intent
@@ -117,6 +132,13 @@ public class CropActivity extends Activity {
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+    }
+
 
     private CropLayout.OnCropListener mOnCropListener = new CropLayout.OnCropListener() {
 

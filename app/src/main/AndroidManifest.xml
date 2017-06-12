@@ -22,7 +22,7 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/AppBaseTheme">
         <activity
             android:name="com.tag.phototext.SplashScreen"
             android:label="@string/app_name">
@@ -60,7 +60,12 @@
             android:name="com.tag.phototext.CameraActivity"
             android:exported="true" />
         <activity android:name="com.tag.phototext.CameraTestActivity"
-            android:exported="true"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:label="Photo Text"
+            android:exported="true">
+            </activity>
+        
+        
     </application>
 
 </manifest>

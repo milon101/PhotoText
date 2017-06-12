@@ -4,6 +4,8 @@ package com.tag.phototext;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
@@ -17,6 +19,8 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.kyo.imagecrop.CropUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,6 +46,9 @@ public class CameraUtils {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
+
+    private int SELECT_FILE = 1, REQUEST_CAMERA = 0, SELECT_CAMERA_FILE = 1;
+
     private int cameraId = CameraInfo.CAMERA_FACING_BACK;
 
     private Context mApplication;
@@ -64,6 +71,7 @@ public class CameraUtils {
     private PreviewCallbacks mPreviewCallbacks;
     private int mCurrentWidth;
     private int mCurrentHeight;
+    Intent dat;
 
     /**
      * Interface to handle action when image is clicked.
@@ -144,10 +152,12 @@ public class CameraUtils {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 TextClass.sUri = Uri.fromFile(new File(path));
+                Log.w(LOGTAG, "onPictureTaken: "+TextClass.sUri );
                 fos.close();
+                startCropper(REQUEST_CAMERA,TextClass.sUri);
 
                 restartPreviewAfterPictureClick();
-                if (TextClass.sUri == null)
+                if (TextClass.sUri != null)
                     Log.w(LOGTAG, "onPictureTaken: uri null");
                 /*
                  * Make the callback to the calling activity to handle picture clicked
@@ -161,6 +171,28 @@ public class CameraUtils {
             }
         }
     };
+
+
+    private void startCropper(int requestCode, Uri data) {
+        Uri uri = null;
+        uri = data;
+        if (requestCode == REQUEST_CAMERA) {
+            uri = data;
+        } else if (uri != null) {
+            uri = data;
+        }
+        Intent intent = new Intent(mApplication, CropActivity.class);
+        intent.setData(uri);
+        intent.putExtra("outputX", CropUtils.dip2px(mApplication, 300));
+        intent.putExtra("outputY", CropUtils.dip2px(mApplication, 150));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mApplication.startActivity(intent);
+
+        Log.w(LOGTAG, "Uri Found starto");
+
+    }
+
 
     public void setCameraDisplayOrientation(Activity activity) {
 
@@ -301,7 +333,7 @@ public class CameraUtils {
      * @return File of the picture
      */
     @SuppressLint("SimpleDateFormat")
-        private File getOutputMediaFile(int type) {
+    private File getOutputMediaFile(int type) {
 
         File mediaStorageDir = getFileStorageDir(mApplication, "Layout_test");
 
@@ -680,15 +712,16 @@ public class CameraUtils {
     /**
      * Method to take a picture. The imageClicked callback will be called
      */
-    public Uri clickPicture() {
+    public void clickPicture() {
 
         Uri rUri = null;
         if ((null == mCamera) || (!mPreviewRunning)) {
-            return rUri;
+            return;
         }
 
         mCamera.takePicture(null, null, mPicture);
-        return TextClass.sUri;
+        if (TextClass.sUri == null)
+            Log.w(LOGTAG, "clickPicture: uri nnnnnull");
     }
 
 

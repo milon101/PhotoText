@@ -58,6 +58,11 @@ public class Ocr2 extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+    }
 
     public void imageProcess() {
 

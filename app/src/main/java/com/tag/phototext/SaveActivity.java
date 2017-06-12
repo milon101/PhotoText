@@ -36,7 +36,7 @@ public class SaveActivity extends AppCompatActivity {
                 createPdf(view);
                 Toast.makeText(getApplicationContext(), "Saved to Photo Text",
                         Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent=new Intent(getApplicationContext(),CameraTestActivity.class);
                 startActivity(intent);
             }
         });

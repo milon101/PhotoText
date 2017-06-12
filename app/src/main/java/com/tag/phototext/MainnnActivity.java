@@ -35,8 +35,8 @@ public class MainnnActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainnn);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_camera);
+//        setSupportActionBar(toolbar);
 
         final GridView gv = (GridView) findViewById(R.id.gv);
         gv.setAdapter(new CustomAdapter(MainnnActivity.this, getPDFs()));
