@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.327" />
 
+
     <ImageButton
         android:id="@+id/finalSave"
         android:layout_width="wrap_content"
@@ -34,6 +35,36 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.501" />
+        app:layout_constraintVertical_bias="0.633" />
+
+
+    <RadioButton
+        android:id="@+id/radioButtonPdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text=".pdf"
+        app:layout_constraintBottom_toTopOf="@+id/finalSave"
+        app:layout_constraintHorizontal_bias="0.394"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/radioButtonTxt"
+        app:layout_constraintTop_toBottomOf="@+id/saveName" />
+
+    <RadioButton
+        android:id="@+id/radioButtonTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="109dp"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:text=".txt"
+        app:layout_constraintBottom_toTopOf="@+id/finalSave"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveName" />
+
 
 </android.support.constraint.ConstraintLayout>

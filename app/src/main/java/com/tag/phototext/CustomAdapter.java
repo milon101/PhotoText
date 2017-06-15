@@ -2,6 +2,7 @@ package com.tag.phototext;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.takeimage.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -56,23 +58,42 @@ public class CustomAdapter extends BaseAdapter {
 
         //BIND DATA
         nameTxt.setText(pdfDoc.getName());
+        if(pdfDoc.getType().equalsIgnoreCase("pdf"))
         img.setImageResource(R.drawable.pdf_icon);
+        else if (pdfDoc.getType().equalsIgnoreCase("txt"))
+            img.setImageResource(R.drawable.txt_icon);
 
         //VIEW ITEM CLICK
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               openPDFView(pdfDoc.getPath());
+               openPDFView(pdfDoc.getPath(),pdfDoc.getType());
             }
         });
         return view;
     }
 
     //OPEN PDF VIEW
-    private void openPDFView(String path)
-    {
+    private void openPDFView(String path,String type) {
+
+        if (type.equalsIgnoreCase("pdf")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(path)), "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+            Intent intent1 = Intent.createChooser(intent, "Open File");
+            c.startActivity(intent1);
 //        Intent i=new Intent(c,PDF_Activity.class);
 //        i.putExtra("PATH",path);
 //        c.startActivity(i);
+        }
+        else if (type.equalsIgnoreCase("txt")){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(path)), "text/plain");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+            Intent intent1 = Intent.createChooser(intent, "Open File");
+            c.startActivity(intent1);
+        }
     }
 }

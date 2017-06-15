@@ -1,21 +1,18 @@
 package com.tag.phototext;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.GridView;
 
 import com.example.takeimage.R;
@@ -30,16 +27,17 @@ public class MainnnActivity extends AppCompatActivity {
 
     private int SELECT_FILE = 1, REQUEST_CAMERA = 0;
     Intent GalIntent;
-
+    CustomAdapter customAdapter;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainnn);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_camera);
-//        setSupportActionBar(toolbar);
 
         final GridView gv = (GridView) findViewById(R.id.gv);
-        gv.setAdapter(new CustomAdapter(MainnnActivity.this, getPDFs()));
+        customAdapter = new CustomAdapter(MainnnActivity.this, getPDFs());
+        gv.setAdapter(customAdapter);
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -53,21 +51,12 @@ public class MainnnActivity extends AppCompatActivity {
                         break;
 
                     case R.id.action_Cam:
-                        startActivity(new Intent(MainnnActivity.this,CameraActivity.class));
+                        startActivity(new Intent(MainnnActivity.this, CameraTestActivity.class));
                         break;
                 }
                 return true;
             }
         });
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                gv.setAdapter(new CustomAdapter(MainnnActivity.this, getPDFs()));
-//
-//            }
-//        });
     }
 
     private ArrayList<PDFDoc> getPDFs()
@@ -91,9 +80,18 @@ public class MainnnActivity extends AppCompatActivity {
                     pdfDoc = new PDFDoc();
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
+                    pdfDoc.setType("pdf");
+
+                    pdfDocs.add(pdfDoc);
+                } else if (file.getPath().endsWith("txt")) {
+                    pdfDoc = new PDFDoc();
+                    pdfDoc.setName(file.getName());
+                    pdfDoc.setPath(file.getAbsolutePath());
+                    pdfDoc.setType("txt");
 
                     pdfDocs.add(pdfDoc);
                 }
+
 
             }
         }
@@ -121,10 +119,6 @@ public class MainnnActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-//
-//		ivImage.setImageBitmap(bitmap);
-//        Intent intent = new Intent(getApplicationContext(), Ocr2.class);
-//        startActivity(intent);
     }
 
 
@@ -154,12 +148,4 @@ public class MainnnActivity extends AppCompatActivity {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         startActivity(intent);
     }
-
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
 }

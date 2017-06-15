@@ -112,8 +112,14 @@ public class CameraTestActivity extends AppCompatActivity {
 
         @Override
         public void flashSet(String flashMode) {
-            if(flashMode.equalsIgnoreCase("on"))
-            cameraFlash.set(flashMode);
+            if (flashMode.equalsIgnoreCase("on"))
+            cameraFlash.setImageResource(R.drawable.flash);
+            else if (flashMode.equalsIgnoreCase("off"))
+                cameraFlash.setImageResource(R.drawable.flashoff);
+            else if (flashMode.equalsIgnoreCase("auto"))
+                cameraFlash.setImageResource(R.drawable.automaticflash);
+
+
 
         }
 
@@ -144,22 +150,19 @@ public class CameraTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        toolbar=(Toolbar)findViewById(R.id.toolbar_camera);
-        setSupportActionBar(toolbar);
 
-//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//
-//        View decorView = getWindow().getDecorView();
-//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-//        // Remember that you should never show the action bar if the
-//        // status bar is hidden, so hide that too if necessary.
-//        ActionBar actionBar = getActionBar();
-//        if (null != actionBar)
-//            actionBar.hide();
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        if (null != actionBar)
+            actionBar.hide();
 
         setContentView(R.layout.activity_test);
 
@@ -175,6 +178,7 @@ public class CameraTestActivity extends AppCompatActivity {
         cameraFlash = (ImageButton) findViewById(R.id.button_flash);
         cameraFlash.setVisibility(View.VISIBLE);
         cameraFlash.setOnClickListener(OnFlashClick);
+        cameraFlash.setImageResource(R.drawable.flash);
 
 
         mOrientation = this.getResources().getConfiguration().orientation;
@@ -220,7 +224,7 @@ public class CameraTestActivity extends AppCompatActivity {
                         startActivity(new Intent(CameraTestActivity.this, MainnnActivity.class));
                         break;
 
-                    case R.id.action_Cam:
+                    case R.id.action_settings:
                         break;
                 }
                 return true;
@@ -440,7 +444,7 @@ public class CameraTestActivity extends AppCompatActivity {
                 }
 
 				   /*
-				    * Surface view should be like this
+                    * Surface view should be like this
 				    * 		_______________
 				    * 	   |		9  	   |
 				    * 	   |			   |
