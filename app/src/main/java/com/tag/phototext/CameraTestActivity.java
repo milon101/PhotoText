@@ -53,7 +53,6 @@ public class CameraTestActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
 
     private CameraUtils mCamUtils = null;
-    private Button capturePic = null;
     private ImageButton flipCamera = null;
     private ImageButton cameraFlash = null;
     private RelativeLayout cameraLayout = null;
@@ -165,11 +164,6 @@ public class CameraTestActivity extends AppCompatActivity {
             actionBar.hide();
 
         setContentView(R.layout.activity_test);
-
-
-        capturePic = (Button) findViewById(R.id.button_capture);
-        capturePic.setVisibility(View.VISIBLE);
-        capturePic.setOnClickListener(OnCapture);
 
         flipCamera = (ImageButton) findViewById(R.id.button_flip);
         flipCamera.setVisibility(View.VISIBLE);

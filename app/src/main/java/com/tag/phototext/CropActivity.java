@@ -17,25 +17,18 @@ package com.tag.phototext;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.view.MenuItem;
+
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.takeimage.R;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.codec.Base64;
 import com.kyo.imagecrop.CropLayout;
 import com.kyo.imagecrop.CropUtils;
 
@@ -45,8 +38,8 @@ import java.io.InputStream;
 
 public class CropActivity extends Activity {
 
+    BottomNavigationView bottomNavigationView;
     private CropLayout mCropLayout;
-    private ImageButton mDoneButton;
     Intent cropIntent;
     String outputFormat;
     public static int mOrientation;
@@ -56,16 +49,11 @@ public class CropActivity extends Activity {
     int fullWidth = 0;
     int fullHeight = 0;
     private static String LOGTAG = "CameraActivity";
-    ImageButton imageButton11, imageButton43, imageButton169;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_crop);
-
-        imageButton11 = (ImageButton) findViewById(R.id.imageButton11);
-        imageButton43 = (ImageButton) findViewById(R.id.imageButton43);
-        imageButton169 = (ImageButton) findViewById(R.id.imageButton169);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -73,16 +61,17 @@ public class CropActivity extends Activity {
         }
 
         mOrientation = this.getResources().getConfiguration().orientation;
+        Display display = getWindowManager().getDefaultDisplay();
+        final int width = display.getWidth();
+        final int height = display.getHeight();
 
         final Uri sourceUri = intent.getData();
         int outputX = intent
-                .getIntExtra("outputX", CropUtils.dip2px(this, 200));
+                .getIntExtra("outputX", CropUtils.dip2px(this, width));
         int outputY = intent
-                .getIntExtra("outputY", CropUtils.dip2px(this, 200));
+                .getIntExtra("outputY", CropUtils.dip2px(this, height));
         outputFormat = intent.getStringExtra("outputFormat");
-
-        mDoneButton = (ImageButton) this.findViewById(R.id.done);
-        mDoneButton.setOnClickListener(mOnClickListener);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav_crop);
 
 
         // bellow
@@ -91,47 +80,50 @@ public class CropActivity extends Activity {
         mCropLayout.startCropImage(sourceUri, outputX, outputY);
         mCropLayout.setOutputFormat(outputFormat);
 
-        imageButton11.setOnClickListener(new OnClickListener() {
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                mCropLayout.startCropImage(sourceUri, 720, 720);
-                mCropLayout.setOutputFormat(outputFormat);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.cropOrigianal:
+                        mCropLayout.startCropImage(sourceUri, width, height);
+                        mCropLayout.setOutputFormat(outputFormat);
+                        break;
+
+                    case R.id.crop169:
+                        mCropLayout.startCropImage(sourceUri, 1280, 720);
+                        mCropLayout.setOutputFormat(outputFormat);
+                        break;
+
+                    case R.id.cropDone:
+                        mCropLayout.requestCropResult();
+                        break;
+
+                    case R.id.cropSquare:
+                        mCropLayout.startCropImage(sourceUri, 1280, 1280);
+                        mCropLayout.setOutputFormat(outputFormat);
+                        break;
+                }
+                return true;
             }
         });
-
-        imageButton43.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCropLayout.startCropImage(sourceUri, 1280, 960);
-                mCropLayout.setOutputFormat(outputFormat);
-            }
-        });
-
-        imageButton169.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCropLayout.startCropImage(sourceUri, 1280, 720);
-                mCropLayout.setOutputFormat(outputFormat);
-            }
-        });
-
 
     }
 
-    private OnClickListener mOnClickListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.done: {
-                    mCropLayout.requestCropResult();
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-    };
+//    private OnClickListener mOnClickListener = new OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//            switch (v.getId()) {
+//                case R.id.done: {
+//                    mCropLayout.requestCropResult();
+//                    break;
+//                }
+//                default:
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     public void onBackPressed() {
@@ -167,9 +159,9 @@ public class CropActivity extends Activity {
 
         @Override
         public void onLoadingStateChanged(boolean isLoading) {
-            if (mDoneButton != null) {
-                mDoneButton.setEnabled(!isLoading);
-            }
+//            if (mDoneButton != null) {
+//                mDoneButton.setEnabled(!isLoading);
+//            }
         }
     };
 }

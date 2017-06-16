@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/cropOrigianal"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_full"
+        android:title="Crop Original"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/crop169"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_crop169"
+        android:title="16:9"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/cropSquare"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_cropsquare"
+        android:title="Square"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/cropDone"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_donee"
+        android:title="Done"
+        app:showAsAction="always" />
+
+</menu>
