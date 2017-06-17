@@ -57,6 +57,7 @@
         <activity
             android:name="com.tag.phototext.MainnnActivity"
             android:exported="true"
+            android:theme="@style/AppBar"
             />
         <activity
             android:name="com.tag.phototext.CameraActivity"

@@ -3,16 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FCFFF4"
+    android:background="@color/colorMiddle"
     android:orientation="vertical">
 
     <com.kyo.imagecrop.CropLayout
         android:id="@+id/crop"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
         android:layout_weight="1"
-        android:background="#FCFFF4" />
+        android:background="@color/colorMiddle" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
-            app:itemBackground="@color/colorGray"
+            app:itemBackground="@color/colorBottom"
             app:itemIconTint="@drawable/nav_item_color_state"
             app:menu="@menu/crop_navigation"></android.support.design.widget.BottomNavigationView>
 

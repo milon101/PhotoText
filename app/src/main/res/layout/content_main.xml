@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.tag.phototext.MainnnActivity"
-    android:background="#E1E2E1"
+    android:background="@color/colorMiddle"
     tools:showIn="@layout/activity_mainnn">
 
     <GridView
@@ -29,7 +29,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        app:itemBackground="@color/colorGray"
+        app:itemBackground="@color/colorBottom"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:menu="@menu/bottom_navigation_menu"></android.support.design.widget.BottomNavigationView>
 

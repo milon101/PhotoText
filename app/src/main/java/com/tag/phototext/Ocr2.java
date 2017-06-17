@@ -1,6 +1,5 @@
 package com.tag.phototext;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -8,11 +7,13 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,11 +26,11 @@ import java.io.IOException;
 
 public class Ocr2 extends AppCompatActivity {
 
-    ImageButton next;
     String TAG = "MAIN ACTIVITY";
     ImageView imageView;
     Uri uri;
     Intent CrIntent;
+    BottomNavigationView bottomNavigationView;
 
 
     @Override
@@ -37,22 +38,24 @@ public class Ocr2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr2);
 
-        next = (ImageButton) findViewById(R.id.upload_btn1);
-
         imageView = (ImageView) findViewById(R.id.imgView);
 
 //        if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
 //            TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
 
         imageView.setImageBitmap(TextClass.sbitmap);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav_ocr2);
 
-
-        next.setOnClickListener(new View.OnClickListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                imageProcess();
-                Intent intent = new Intent(getApplicationContext(), TextViewActivity.class);
-                startActivity(intent);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.actionOcr:
+                        imageProcess();
+                       startActivity(new Intent(getApplicationContext(),TextViewActivity.class));
+                        break;
+                }
+                return true;
             }
         });
 

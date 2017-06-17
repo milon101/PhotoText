@@ -16,7 +16,7 @@
             android:id="@+id/pdfImage"
             android:layout_width="100dp"
             android:layout_height="135dp"
-            android:src="@drawable/pdf_icon" />
+            android:src="@drawable/lpdf_icon_updated" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -29,10 +29,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:text="Namej"
+                android:textSize="15dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#008790"
-                android:textStyle="bold" />
+                android:textColor="#008790"/>
 
         </LinearLayout>
 

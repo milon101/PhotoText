@@ -17,7 +17,7 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        
+
         <item name="android:windowBackground">@color/background_material_light</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -27,5 +27,7 @@
 
     </style>
 
-
+    <style name="AppBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorAppbar</item>
+    </style>
 </resources>

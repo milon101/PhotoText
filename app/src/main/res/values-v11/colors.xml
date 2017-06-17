@@ -9,5 +9,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorGray">#000000</color>
+    <color name="colorGray">#004D40</color>
+    <color name="colorBottom">#39796B</color>
+    <color name="colorAppbar">#00251A</color>
+    <color name="colorMiddle">#004D40</color>
 </resources>

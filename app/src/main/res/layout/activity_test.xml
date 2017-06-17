@@ -81,7 +81,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-        app:itemBackground="@color/colorGray"
+        app:itemBackground="@color/colorBottom"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:itemTextColor="#FFFFFF"
         app:menu="@menu/surface_navigation"></android.support.design.widget.BottomNavigationView>

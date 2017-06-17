@@ -59,9 +59,9 @@ public class CustomAdapter extends BaseAdapter {
         //BIND DATA
         nameTxt.setText(pdfDoc.getName());
         if(pdfDoc.getType().equalsIgnoreCase("pdf"))
-        img.setImageResource(R.drawable.pdf_icon);
+        img.setImageResource(R.drawable.lpdf_icon_updated);
         else if (pdfDoc.getType().equalsIgnoreCase("txt"))
-            img.setImageResource(R.drawable.txt_icon);
+            img.setImageResource(R.drawable.txt_icon_updated);
 
         //VIEW ITEM CLICK
         view.setOnClickListener(new View.OnClickListener() {

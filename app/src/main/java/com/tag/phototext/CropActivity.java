@@ -48,6 +48,7 @@ public class CropActivity extends Activity {
     RelativeLayout.LayoutParams fullScreenParams;
     int fullWidth = 0;
     int fullHeight = 0;
+    public boolean flag=false;
     private static String LOGTAG = "CameraActivity";
 
     @Override
@@ -91,8 +92,64 @@ public class CropActivity extends Activity {
                         break;
 
                     case R.id.crop169:
-                        mCropLayout.startCropImage(sourceUri, 1280, 720);
+                        if(flag==false) {
+                            item.setIcon(R.drawable.ic_action_crop169);
+                            item.setTitle("16:9");
+                            mCropLayout.startCropImage(sourceUri, 720, 1280);
+                            mCropLayout.setOutputFormat(outputFormat);
+
+                            flag=true;
+                            break;
+                        }
+                        if (flag==true) {
+                            item.setIcon(R.drawable.ic_action_crop_portrait);
+                            item.setTitle("Portrait");
+                            mCropLayout.startCropImage(sourceUri, 1280, 720);
+                            mCropLayout.setOutputFormat(outputFormat);
+                            flag=false;
+                            break;
+                        }
+                        break;
+
+                    case R.id.cropDone:
+                        mCropLayout.requestCropResult();
+                        break;
+
+                    case R.id.cropSquare:
+                        mCropLayout.startCropImage(sourceUri, 1280, 1280);
                         mCropLayout.setOutputFormat(outputFormat);
+                        break;
+                }
+                return true;
+            }
+        });
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.cropOrigianal:
+                        mCropLayout.startCropImage(sourceUri, width, height);
+                        mCropLayout.setOutputFormat(outputFormat);
+                        break;
+
+                    case R.id.crop169:
+                        if(flag==false) {
+                            item.setIcon(R.drawable.ic_action_crop169);
+                            item.setTitle("16:9");
+                            mCropLayout.startCropImage(sourceUri, 720, 1280);
+                            mCropLayout.setOutputFormat(outputFormat);
+
+                            flag=true;
+                            break;
+                        }
+                        if (flag==true) {
+                            item.setIcon(R.drawable.ic_action_crop_portrait);
+                            item.setTitle("Portrait");
+                            mCropLayout.startCropImage(sourceUri, 1280, 720);
+                            mCropLayout.setOutputFormat(outputFormat);
+                            flag=false;
+                            break;
+                        }
                         break;
 
                     case R.id.cropDone:
