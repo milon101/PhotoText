@@ -300,9 +300,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!listenerSet) {
-            return false;
-        }
+//        if (!listenerSet) {
+//            return false;
+//        }
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             float x = event.getX();
             float y = event.getY();

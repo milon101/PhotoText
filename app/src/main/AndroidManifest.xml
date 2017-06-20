@@ -25,8 +25,8 @@
         android:theme="@style/AppBaseTheme">
         <activity
             android:name="com.tag.phototext.SplashScreen"
-            android:theme="@style/AppTheme"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,26 +49,28 @@
             android:exported="true" />
         <activity android:name="com.tag.phototext.Main2Activity" />
         <activity android:name="com.tag.phototext.Main3Activity" />
-        <activity android:name="com.tag.phototext.Ocr2" />
+        <activity android:name="com.tag.phototext.Ocr2"
+            android:theme="@style/AppBar"/>
         <activity android:name="com.tag.phototext.TextActivity" />
         <activity android:name="com.tag.phototext.CropActivity" />
         <activity android:name="com.tag.phototext.SaveActivity" />
-        <activity android:name="com.tag.phototext.TextViewActivity"></activity>
+        <activity android:name="com.tag.phototext.TextViewActivity"
+            android:theme="@style/AppBar">
+        </activity>
         <activity
             android:name="com.tag.phototext.MainnnActivity"
             android:exported="true"
-            android:theme="@style/AppBar"
-            />
+            android:theme="@style/AppBar" />
         <activity
             android:name="com.tag.phototext.CameraActivity"
             android:exported="true" />
-        <activity android:name="com.tag.phototext.CameraTestActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+        <activity
+            android:name="com.tag.phototext.CameraTestActivity"
+            android:exported="true"
             android:label="Photo Text"
-            android:exported="true">
-            </activity>
-        
-        
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+
+
     </application>
 
 </manifest>

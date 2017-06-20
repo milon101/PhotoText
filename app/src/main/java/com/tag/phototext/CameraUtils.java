@@ -478,6 +478,7 @@ public class CameraUtils {
          * Create our Preview view and set it as the content of our activity.
          */
         mPreview = new CameraPreview(mApplication, mCamera, mPreviewCallbacks, ar);
+        mPreview = new CameraPreview(mApplication, mCamera, mPreviewCallbacks, ar);
         preview.addView(mPreview);
         mPreview.setZOrderOnTop(true);
         mPreview.setZOrderMediaOverlay(true);
