@@ -1,7 +1,9 @@
 package com.tag.phototext;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -9,13 +11,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.takeimage.R;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TextViewActivity extends AppCompatActivity {
 
     TextView textView;
     BottomNavigationView bottomNavigationView;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +43,7 @@ public class TextViewActivity extends AppCompatActivity {
             textView.setText(TextClass.stringBuilder.toString());
         else
             textView.setText("Sorry !!! Nothing to show !!!");
+        name = TextClass.stringBuilder.toString().substring(0, 5);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -37,7 +53,8 @@ public class TextViewActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), TextActivity.class));
                         break;
                     case R.id.textDne:
-                        startActivity(new Intent(getApplicationContext(), SaveActivity.class));
+                        createPdf();
+                        startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
                         break;
                 }
                 return true;
@@ -76,6 +93,50 @@ public class TextViewActivity extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void createPdf() {
+        Document doc = new Document();
+        File folder = new File(Environment.getExternalStorageDirectory() +
+                File.separator + "Photo Text");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String outpsth = "/sdcard/Photo Text/" + name + "_" + timeStamp + ".pdf";
+        try {
+            PdfWriter.getInstance(doc, new FileOutputStream(outpsth));
+            doc.open();
+            doc.add(new Paragraph(TextClass.stringBuilder.toString()));
+            doc.close();
+            Toast.makeText(getApplicationContext(), "Saved to Photo Text", Toast.LENGTH_SHORT).show();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void writeToFile(String data, Context context) {
+        try {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            File myFile = new File("/sdcard/Photo Text/" + name + "_" + timeStamp + ".txt");
+            myFile.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(myFile);
+            OutputStreamWriter myOutWriter =
+                    new OutputStreamWriter(fOut);
+            myOutWriter.append(data);
+            myOutWriter.close();
+            fOut.close();
+            Toast.makeText(getBaseContext(),
+                    "Done writing SD 'mysdfile.txt'",
+                    Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
