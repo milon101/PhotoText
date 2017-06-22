@@ -23,7 +23,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.example.takeimage.R;
 import com.kyo.imagecrop.CropUtils;
 
 public class MainActivity extends Activity {

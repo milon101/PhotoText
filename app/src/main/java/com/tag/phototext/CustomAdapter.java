@@ -1,6 +1,8 @@
 package com.tag.phototext;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -9,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.takeimage.R;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,21 +46,20 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view==null)
-        {
+        if (view == null) {
             //INFLATE CUSTOM LAYOUT
-            view= LayoutInflater.from(c).inflate(R.layout.model,viewGroup,false);
+            view = LayoutInflater.from(c).inflate(R.layout.model, viewGroup, false);
         }
 
-        final PDFDoc pdfDoc= (PDFDoc) this.getItem(i);
+        final PDFDoc pdfDoc = (PDFDoc) this.getItem(i);
 
-        TextView nameTxt= (TextView) view.findViewById(R.id.nameTxt);
-        ImageView img= (ImageView) view.findViewById(R.id.pdfImage);
+        final TextView nameTxt = (TextView) view.findViewById(R.id.nameTxt);
+        ImageView img = (ImageView) view.findViewById(R.id.pdfImage);
 
         //BIND DATA
         nameTxt.setText(pdfDoc.getName());
-        if(pdfDoc.getType().equalsIgnoreCase("pdf"))
-        img.setImageResource(R.drawable.lpdf_icon_updated);
+        if (pdfDoc.getType().equalsIgnoreCase("pdf"))
+            img.setImageResource(R.drawable.lpdf_icon_updated);
         else if (pdfDoc.getType().equalsIgnoreCase("txt"))
             img.setImageResource(R.drawable.txt_icon_updated);
 
@@ -67,14 +67,33 @@ public class CustomAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               openPDFView(pdfDoc.getPath(),pdfDoc.getType());
+                openPDFView(pdfDoc.getPath(), pdfDoc.getType());
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final CharSequence[] items = {"Rename", "Delete",
+                        "Cancel"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(c);
+                builder.setTitle(nameTxt.getText().toString());
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
         return view;
     }
 
     //OPEN PDF VIEW
-    private void openPDFView(String path,String type) {
+    private void openPDFView(String path, String type) {
 
         if (type.equalsIgnoreCase("pdf")) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -86,8 +105,7 @@ public class CustomAdapter extends BaseAdapter {
 //        Intent i=new Intent(c,PDF_Activity.class);
 //        i.putExtra("PATH",path);
 //        c.startActivity(i);
-        }
-        else if (type.equalsIgnoreCase("txt")){
+        } else if (type.equalsIgnoreCase("txt")) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(new File(path)), "text/plain");
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

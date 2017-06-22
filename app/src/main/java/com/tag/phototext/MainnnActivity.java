@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.GridView;
 
-import com.example.takeimage.R;
 import com.kyo.imagecrop.CropUtils;
 
 import java.io.File;
@@ -29,6 +28,7 @@ public class MainnnActivity extends AppCompatActivity {
     Intent GalIntent;
     CustomAdapter customAdapter;
     Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +48,7 @@ public class MainnnActivity extends AppCompatActivity {
                         break;
 
                     case R.id.action_settings:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                         break;
 
                     case R.id.action_Cam:

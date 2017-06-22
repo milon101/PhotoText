@@ -28,7 +28,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.example.takeimage.R;
 import com.kyo.imagecrop.CropLayout;
 import com.kyo.imagecrop.CropUtils;
 

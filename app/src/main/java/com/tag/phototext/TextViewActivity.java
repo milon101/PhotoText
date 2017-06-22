@@ -2,8 +2,10 @@ package com.tag.phototext;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.takeimage.R;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -30,20 +31,29 @@ public class TextViewActivity extends AppCompatActivity {
 
     TextView textView;
     BottomNavigationView bottomNavigationView;
-    String name;
+    String name, flag;
+    private Context mContext;
+
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_view);
 
+        mContext = getApplicationContext();
         textView = (TextView) findViewById(R.id.textVieww);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_TextView_nav);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (!TextClass.stringBuilder.toString().isEmpty())
+            name = TextClass.stringBuilder.toString().substring(0, 5);
+        flag = mSharedPreferences.getString("outputType", "1");
+
         if (!TextClass.stringBuilder.toString().isEmpty())
             textView.setText(TextClass.stringBuilder.toString());
         else
             textView.setText("Sorry !!! Nothing to show !!!");
-        name = TextClass.stringBuilder.toString().substring(0, 5);
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -53,8 +63,13 @@ public class TextViewActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), TextActivity.class));
                         break;
                     case R.id.textDne:
-                        createPdf();
-                        startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                        if (flag.equalsIgnoreCase("1")) {
+                            createPdf();
+                            startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                        } else if (flag.equalsIgnoreCase("2")) {
+                            writeToFile(TextClass.stringBuilder.toString(), getApplicationContext());
+                            startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                        }
                         break;
                 }
                 return true;

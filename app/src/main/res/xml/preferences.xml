@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/type_lists"
+        android:entryValues="@array/type_lists_value"
+        android:key="outputType"
+        android:summary="Select an output type"
+        android:title="Output type"></ListPreference>
+
+</PreferenceScreen>

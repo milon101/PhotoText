@@ -15,7 +15,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,13 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-
-import com.example.takeimage.R;
 import com.kyo.imagecrop.CropUtils;
 
 import java.io.File;
@@ -112,12 +108,11 @@ public class CameraTestActivity extends AppCompatActivity {
         @Override
         public void flashSet(String flashMode) {
             if (flashMode.equalsIgnoreCase("on"))
-            cameraFlash.setImageResource(R.drawable.flash);
+                cameraFlash.setImageResource(R.drawable.flash);
             else if (flashMode.equalsIgnoreCase("off"))
                 cameraFlash.setImageResource(R.drawable.flashoff);
             else if (flashMode.equalsIgnoreCase("auto"))
                 cameraFlash.setImageResource(R.drawable.automaticflash);
-
 
 
         }
@@ -219,6 +214,7 @@ public class CameraTestActivity extends AppCompatActivity {
                         break;
 
                     case R.id.action_settings:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                         break;
                 }
                 return true;

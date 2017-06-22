@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.takeimage.R;
 
 public class SplashScreen extends AppCompatActivity {
 

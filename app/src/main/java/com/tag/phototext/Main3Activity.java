@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.takeimage.R;
-
 import java.io.IOException;
 
 public class Main3Activity extends AppCompatActivity {
