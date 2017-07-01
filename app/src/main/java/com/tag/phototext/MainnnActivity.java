@@ -3,10 +3,12 @@ package com.tag.phototext;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -28,6 +30,9 @@ public class MainnnActivity extends AppCompatActivity {
     Intent GalIntent;
     CustomAdapter customAdapter;
     Context context;
+    private SharedPreferences mSharedPreferences;
+    String flag;
+    int num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,10 @@ public class MainnnActivity extends AppCompatActivity {
         customAdapter = new CustomAdapter(MainnnActivity.this, getPDFs());
         gv.setAdapter(customAdapter);
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        flag = mSharedPreferences.getString("gridValues", "1");
+        num = Integer.parseInt(flag);
+        gv.setNumColumns(num);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

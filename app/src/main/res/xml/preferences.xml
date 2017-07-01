@@ -8,4 +8,12 @@
         android:summary="Select an output type"
         android:title="Output type"></ListPreference>
 
+    <ListPreference
+        android:defaultValue="3"
+        android:entries="@array/gridValues"
+        android:entryValues="@array/gridValues"
+        android:key="gridValues"
+        android:summary="No. of items in a row"
+        android:title="Items in a row"></ListPreference>
+
 </PreferenceScreen>

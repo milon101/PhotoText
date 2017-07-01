@@ -18,9 +18,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by Oclemy on 7/28/2016 for ProgrammingWizards Channel and http://www.camposha.com.
- */
 public class CustomAdapter extends BaseAdapter {
 
     Context c;
@@ -60,8 +57,8 @@ public class CustomAdapter extends BaseAdapter {
         }
 
         final PDFDoc pdfDoc = (PDFDoc) this.getItem(i);
-
         final TextView nameTxt = (TextView) view.findViewById(R.id.nameTxt);
+
         ImageView img = (ImageView) view.findViewById(R.id.pdfImage);
 
         //BIND DATA
@@ -96,7 +93,6 @@ public class CustomAdapter extends BaseAdapter {
                             string = pdfDoc.getPath().substring(0, pdfDoc.getPath().lastIndexOf(File.separator));
                             secondDialogBuilder = new AlertDialog.Builder(c);
                             secondDialogBuilder.setTitle("Rename File");
-//                            secondDialogBuilder.setMessage("Enter Password");
                             final EditText input = new EditText(c);
 
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -104,7 +100,6 @@ public class CustomAdapter extends BaseAdapter {
                                     LinearLayout.LayoutParams.MATCH_PARENT);
                             input.setLayoutParams(lp);
                             secondDialogBuilder.setView(input);
-//                            alertDialog.setIcon(R.drawable.key);
                             result = pdfDoc.getName().substring(0, pdfDoc.getName().lastIndexOf("."));
                             input.setText(result);
                             input.selectAll();
@@ -145,8 +140,6 @@ public class CustomAdapter extends BaseAdapter {
                             secondDialog.show();
 
                         }
-
-                        //Toast.makeText(c, "Rename" + string, Toast.LENGTH_SHORT).show();
 
                     }
                 });
