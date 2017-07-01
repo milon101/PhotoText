@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +25,12 @@ public class CustomAdapter extends BaseAdapter {
 
     Context c;
     ArrayList<PDFDoc> pdfDocs;
+    String string1, string, result;
+    File newFile, currentFile;
+    private AlertDialog.Builder firstDialogBuilder;
+    private AlertDialog firstDialog;
+    private AlertDialog.Builder secondDialogBuilder;
+    private AlertDialog secondDialog;
 
     public CustomAdapter(Context c, ArrayList<PDFDoc> pdfDocs) {
         this.c = c;
@@ -71,25 +79,90 @@ public class CustomAdapter extends BaseAdapter {
             }
         });
 
+
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                final CharSequence[] items = {"Rename", "Delete",
+            public boolean onLongClick(final View v) {
+                final CharSequence[] items = {"Rename", "Delete", "Share",
                         "Cancel"};
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(c);
-                builder.setTitle(nameTxt.getText().toString());
-                builder.setItems(items, new DialogInterface.OnClickListener() {
+                firstDialogBuilder = new AlertDialog.Builder(c);
+                firstDialogBuilder.setTitle(nameTxt.getText().toString());
+                firstDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (items[which].equals("Rename")) {
+                            currentFile = new File(pdfDoc.getPath());
+                            string = pdfDoc.getPath().substring(0, pdfDoc.getPath().lastIndexOf(File.separator));
+                            secondDialogBuilder = new AlertDialog.Builder(c);
+                            secondDialogBuilder.setTitle("Rename File");
+//                            secondDialogBuilder.setMessage("Enter Password");
+                            final EditText input = new EditText(c);
+
+                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.MATCH_PARENT);
+                            input.setLayoutParams(lp);
+                            secondDialogBuilder.setView(input);
+//                            alertDialog.setIcon(R.drawable.key);
+                            result = pdfDoc.getName().substring(0, pdfDoc.getName().lastIndexOf("."));
+                            input.setText(result);
+                            input.selectAll();
+
+
+                            secondDialogBuilder.setPositiveButton("RENAME",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            string1 = input.getText().toString();
+                                            if (string1.isEmpty())
+                                                string1 = result;
+                                            if (pdfDoc.getType().equalsIgnoreCase("pdf")) {
+                                                newFile = new File(string + "/" + string1 + ".pdf");
+                                            } else if (pdfDoc.getType().equalsIgnoreCase("txt")) {
+                                                newFile = new File(string + "/" + string1 + ".txt");
+                                            }
+                                            if (rename(currentFile, newFile)) {
+                                                //Success
+                                                c.startActivity(new Intent(c, MainnnActivity.class));
+                                            } else {
+                                                //Fail
+                                                Log.i("TAG", "Fail");
+                                            }
+                                            secondDialog.dismiss();
+                                        }
+                                    });
+
+                            secondDialogBuilder.setNegativeButton("CANCEL",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            firstDialog.cancel();
+                            secondDialog = secondDialogBuilder.create();
+                            secondDialog.setCanceledOnTouchOutside(false);
+                            secondDialog.show();
+
+                        }
+
+                        //Toast.makeText(c, "Rename" + string, Toast.LENGTH_SHORT).show();
 
                     }
                 });
-                builder.show();
+                firstDialog = firstDialogBuilder.create();
+                firstDialog.show();
                 return true;
             }
         });
+
+
         return view;
+    }
+
+
+    private boolean rename(File from, File to) {
+        return from.getParentFile().exists() && from.exists() && from.renameTo(to);
     }
 
     //OPEN PDF VIEW
