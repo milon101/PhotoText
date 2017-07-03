@@ -13,7 +13,6 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -31,14 +30,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Camera Utils class. This class has all the camera related features.
- * Simple APIs are exposed to the activity using this class
- * The Preview layout onto which the preview has to be rendered must be given during object
- * creation
- *
- * @author SHRISH
- */
 public class CameraUtils {
 
     private static String LOGTAG = "CameraUtils";
@@ -73,13 +64,7 @@ public class CameraUtils {
     private int mCurrentHeight;
     Intent dat;
 
-    /**
-     * Interface to handle action when image is clicked.
-     * Implement this method to handle any processing on image clicked action.
-     * An file info object will be given, containing all the image path
-     *
-     * @author SHRISH
-     */
+
     public interface ImageClicked {
 
         /**
@@ -152,9 +137,9 @@ public class CameraUtils {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 TextClass.sUri = Uri.fromFile(new File(path));
-                Log.w(LOGTAG, "onPictureTaken: "+TextClass.sUri );
+                Log.w(LOGTAG, "onPictureTaken: " + TextClass.sUri);
                 fos.close();
-                startCropper(REQUEST_CAMERA,TextClass.sUri);
+                startCropper(REQUEST_CAMERA, TextClass.sUri);
 
                 restartPreviewAfterPictureClick();
                 if (TextClass.sUri != null)
@@ -832,11 +817,7 @@ public class CameraUtils {
         return finalratio;
     }
 
-    /**
-     * Class to hold aspect ratio, width and height
-     *
-     * @author SHRISH
-     */
+
     public class CameraAspectRatio {
         int width;
         int height;

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class CustomAdapter extends BaseAdapter {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
-                final CharSequence[] items = {"Rename", "Delete", "Share",
+                final CharSequence[] items = {"View", "Rename", "Delete", "Share",
                         "Cancel"};
 
                 firstDialogBuilder = new AlertDialog.Builder(c);
@@ -88,6 +89,45 @@ public class CustomAdapter extends BaseAdapter {
                 firstDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        if (items[which].equals("Share")) {
+                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                            Uri uri = Uri.parse(pdfDoc.getPath());
+                            File file = new File(pdfDoc.getPath());
+                            uri = Uri.fromFile(file);
+                            sharingIntent.setType("application/pdf");
+                            sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                            c.startActivity(Intent.createChooser(sharingIntent, "Choose sharing method"));
+                        }
+
+                        if (items[which].equals("Delete")) {
+                            File file = new File(pdfDoc.getPath());
+                            boolean deleted = file.delete();
+                            if (deleted) {
+                                c.startActivity(new Intent(c, MainnnActivity.class));
+                                Toast.makeText(c, "Deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        if (items[which].equals("View")) {
+                            if (pdfDoc.getType().equalsIgnoreCase("pdf")) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setDataAndType(Uri.fromFile(new File(pdfDoc.getPath())), "application/pdf");
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                                Intent intent1 = Intent.createChooser(intent, "Open File");
+                                c.startActivity(intent1);
+                            } else if (pdfDoc.getType().equalsIgnoreCase("txt")) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setDataAndType(Uri.fromFile(new File(pdfDoc.getPath())), "text/plain");
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                                Intent intent1 = Intent.createChooser(intent, "Open File");
+                                c.startActivity(intent1);
+                            }
+                        }
+
+
                         if (items[which].equals("Rename")) {
                             currentFile = new File(pdfDoc.getPath());
                             string = pdfDoc.getPath().substring(0, pdfDoc.getPath().lastIndexOf(File.separator));

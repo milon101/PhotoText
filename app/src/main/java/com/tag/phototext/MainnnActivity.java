@@ -14,8 +14,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.kyo.imagecrop.CropUtils;
 
@@ -42,6 +44,7 @@ public class MainnnActivity extends AppCompatActivity {
         final GridView gv = (GridView) findViewById(R.id.gv);
         customAdapter = new CustomAdapter(MainnnActivity.this, getPDFs());
         gv.setAdapter(customAdapter);
+        gv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         flag = mSharedPreferences.getString("gridValues", "1");
@@ -67,6 +70,30 @@ public class MainnnActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_more, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionMore:
+
+
+                final CharSequence[] items = {"Take Photo", "Choose from Library",
+                        "Cancel"};
+
+
+                Toast.makeText(getApplicationContext(),"Menu",Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private ArrayList<PDFDoc> getPDFs()
