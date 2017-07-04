@@ -1,7 +1,9 @@
 package com.tag.phototext;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,8 +16,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -30,6 +35,7 @@ public class MainnnActivity extends AppCompatActivity {
 
     private int SELECT_FILE = 1, REQUEST_CAMERA = 0;
     Intent GalIntent;
+    GridView gv;
     CustomAdapter customAdapter;
     Context context;
     private SharedPreferences mSharedPreferences;
@@ -41,10 +47,9 @@ public class MainnnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainnn);
 
-        final GridView gv = (GridView) findViewById(R.id.gv);
+        gv = (GridView) findViewById(R.id.gv);
         customAdapter = new CustomAdapter(MainnnActivity.this, getPDFs());
         gv.setAdapter(customAdapter);
-        gv.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         flag = mSharedPreferences.getString("gridValues", "1");
@@ -82,13 +87,32 @@ public class MainnnActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionMore:
-
-
-                final CharSequence[] items = {"Take Photo", "Choose from Library",
+                final CharSequence[] items = {"Select", "Remove",
                         "Cancel"};
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainnnActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        boolean result = Utility.checkPermission(MainnnActivity.this);
 
-                Toast.makeText(getApplicationContext(),"Menu",Toast.LENGTH_SHORT).show();
+                        if (items[item].equals("Select")) {
+                            startActivity(new Intent(getApplicationContext(), MultipleActivity.class));
+                            Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                WindowManager.LayoutParams abc = dialog.getWindow().getAttributes();
+                abc.width = WindowManager.LayoutParams.MATCH_PARENT;
+                abc.gravity = Gravity.TOP | Gravity.LEFT;
+                abc.x = 100;   //x position
+                abc.y = 100;   //y position
+                dialog.show();
                 return true;
 
             default:
