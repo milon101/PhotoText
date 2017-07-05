@@ -8,6 +8,7 @@
     <string name="flash_mode_auto">Auto Flash</string>
     <string name="flash_mode_on">Flash on</string>
     <string name="flash_mode_off">Flash off</string>
+    <string name="delete">Delete</string>
 
 
 </resources>

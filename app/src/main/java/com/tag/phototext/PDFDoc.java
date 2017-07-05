@@ -1,10 +1,7 @@
 package com.tag.phototext;
 
-/**
- * Created by Oclemy on 8/6/2016 for ProgrammingWizards Channel and http://www.camposha.com.
- */
 public class PDFDoc {
-    String name,path,type;
+    String name, path, type;
 
 
     public void setType(String type) {
