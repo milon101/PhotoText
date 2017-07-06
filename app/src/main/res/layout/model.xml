@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:id="@+id/cardView"
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="5dp">
 

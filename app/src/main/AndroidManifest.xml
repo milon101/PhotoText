@@ -80,6 +80,7 @@
             android:name=".MultipleActivity"
             android:exported="true"
             android:theme="@style/AppBar"></activity>
+        <activity android:name=".MainActivityyy" />
     </application>
 
 </manifest>

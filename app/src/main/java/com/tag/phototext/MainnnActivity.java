@@ -98,7 +98,7 @@ public class MainnnActivity extends AppCompatActivity {
                         boolean result = Utility.checkPermission(MainnnActivity.this);
 
                         if (items[item].equals("Select")) {
-                            startActivity(new Intent(getApplicationContext(), MultipleActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivityyy.class));
                             Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
