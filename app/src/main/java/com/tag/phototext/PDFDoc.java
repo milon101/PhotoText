@@ -2,6 +2,7 @@ package com.tag.phototext;
 
 public class PDFDoc {
     String name, path, type;
+    Boolean checked=false;
 
 
     public void setType(String type) {
@@ -11,6 +12,15 @@ public class PDFDoc {
     public String getType() {
 
         return type;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
+
+    public Boolean getChecked() {
+
+        return checked;
     }
 
     public String getName() {

@@ -21,7 +21,7 @@ public class GridViewAdapter extends ArrayAdapter<PDFDoc> {
     LayoutInflater inflater;
     ArrayList<PDFDoc> pdfDocs;
     private SparseBooleanArray mSelectedItemsIds;
-    boolean flag = true;
+    int flag = 1, count = 0;
 
     public GridViewAdapter(Context context, int resourceId, ArrayList<PDFDoc> pdfDocs) {
         super(context, resourceId, pdfDocs);
@@ -40,7 +40,7 @@ public class GridViewAdapter extends ArrayAdapter<PDFDoc> {
 
     }
 
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
         final ViewHolder holder;
         if (view == null) {
 
@@ -49,27 +49,26 @@ public class GridViewAdapter extends ArrayAdapter<PDFDoc> {
             holder.nameTxt = (TextView) view.findViewById(R.id.nameTxt);
             holder.img = (ImageView) view.findViewById(R.id.pdfImage);
             holder.cardView = (CardView) view.findViewById(R.id.cardView);
+
+            holder.cardView.setCardBackgroundColor(0x555535);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (flag == false) {
-                    holder.cardView.setCardBackgroundColor(Color.WHITE);
-                    Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT).show();
-                    flag=true;
-                    return false;
-                } else if (flag == true) {
-                    holder.cardView.setCardBackgroundColor(Color.BLUE);
-                    Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT).show();
-                    flag=false;
+                if (pdfDocs.get(position).getChecked()) {
+                    holder.cardView.setCardBackgroundColor(0x555535);
+                    pdfDocs.get(position).setChecked(false);
                     return false;
                 }
+                pdfDocs.get(position).setChecked(true);
+                holder.cardView.setCardBackgroundColor(Color.WHITE);
+                Toast.makeText(getContext(), "Clicked" + getSelectedCount(), Toast.LENGTH_SHORT).show();
+
                 return false;
             }
         });
