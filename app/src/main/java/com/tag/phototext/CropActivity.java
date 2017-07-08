@@ -16,6 +16,9 @@
 package com.tag.phototext;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -158,6 +161,15 @@ public class CropActivity extends Activity {
                     case R.id.cropSquare:
                         mCropLayout.startCropImage(sourceUri, 1280, 1280);
                         mCropLayout.setOutputFormat(outputFormat);
+                        break;
+
+                    case R.id.brightness:
+                        BrightnessFragment crimeFragment=new BrightnessFragment();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        BrightnessFragment hello = new BrightnessFragment();
+                        fragmentTransaction.add(R.id.cropActivity, hello, "HELLO");
+                        fragmentTransaction.commit();
                         break;
                 }
                 return true;
