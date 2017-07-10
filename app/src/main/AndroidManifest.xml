@@ -76,11 +76,7 @@
             android:name=".SettingsActivity"
             android:exported="true"
             android:theme="@style/AppBar" />
-        <activity
-            android:name=".MultipleActivity"
-            android:exported="true"
-            android:theme="@style/AppBar"></activity>
-        <activity android:name=".MainActivityyy" />
+        <activity android:name=".MultipleActivity" />
     </application>
 
 </manifest>

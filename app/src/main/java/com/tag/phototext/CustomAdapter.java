@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.CardView;
+import android.os.Environment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,10 @@ public class CustomAdapter extends BaseAdapter {
     private AlertDialog.Builder secondDialogBuilder;
     private AlertDialog secondDialog;
 
+    private SparseBooleanArray mSelectedItemsIds;
+
     public CustomAdapter(Context c, ArrayList<PDFDoc> pdfDocs) {
+        mSelectedItemsIds = new SparseBooleanArray();
         this.c = c;
         this.pdfDocs = pdfDocs;
     }
@@ -105,7 +109,7 @@ public class CustomAdapter extends BaseAdapter {
                             File file = new File(pdfDoc.getPath());
                             boolean deleted = file.delete();
                             if (deleted) {
-                                c.startActivity(new Intent(c, MainnnActivity.class));
+                                updateList(getPDFs());
                                 Toast.makeText(c, "Deleted", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -160,7 +164,7 @@ public class CustomAdapter extends BaseAdapter {
                                             }
                                             if (rename(currentFile, newFile)) {
                                                 //Success
-                                                c.startActivity(new Intent(c, MainnnActivity.class));
+                                                updateList(getPDFs());
                                             } else {
                                                 //Fail
                                                 Log.i("TAG", "Fail");
@@ -194,6 +198,52 @@ public class CustomAdapter extends BaseAdapter {
         return view;
     }
 
+    private ArrayList<PDFDoc> getPDFs()
+
+    {
+        ArrayList<PDFDoc> pdfDocs = new ArrayList<>();
+        //TARGET FOLDER
+        File downloadsFolder = new File(Environment.getExternalStorageDirectory() + File.separator + "Photo Text");
+
+        PDFDoc pdfDoc;
+
+        if (downloadsFolder.exists()) {
+            //GET ALL FILES IN DOWNLOAD FOLDER
+            File[] files = downloadsFolder.listFiles();
+
+            //LOOP THRU THOSE FILES GETTING NAME AND URI
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+
+                if (file.getPath().endsWith("pdf")) {
+                    pdfDoc = new PDFDoc();
+                    pdfDoc.setName(file.getName());
+                    pdfDoc.setPath(file.getAbsolutePath());
+                    pdfDoc.setType("pdf");
+
+                    pdfDocs.add(pdfDoc);
+                } else if (file.getPath().endsWith("txt")) {
+                    pdfDoc = new PDFDoc();
+                    pdfDoc.setName(file.getName());
+                    pdfDoc.setPath(file.getAbsolutePath());
+                    pdfDoc.setType("txt");
+
+                    pdfDocs.add(pdfDoc);
+                }
+
+
+            }
+        }
+
+        return pdfDocs;
+    }
+
+    public void updateList(ArrayList<PDFDoc> pdfDocss) {
+        pdfDocs.clear();
+        pdfDocs.addAll(pdfDocss);
+        this.notifyDataSetChanged();
+    }
+
 
     private boolean rename(File from, File to) {
         return from.getParentFile().exists() && from.exists() && from.renameTo(to);
@@ -220,5 +270,40 @@ public class CustomAdapter extends BaseAdapter {
             Intent intent1 = Intent.createChooser(intent, "Open File");
             c.startActivity(intent1);
         }
+    }
+
+    public void remove(PDFDoc object) {
+        pdfDocs.remove(object);
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<PDFDoc> getPdf() {
+        return pdfDocs;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public void selectView(int position, boolean value) {
+        if (value) {
+            mSelectedItemsIds.put(position, value);
+        } else {
+            mSelectedItemsIds.delete(position);
+        }
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedCount() {
+        return mSelectedItemsIds.size();
+    }
+
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
     }
 }

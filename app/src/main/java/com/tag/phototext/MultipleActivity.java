@@ -1,85 +1,125 @@
 package com.tag.phototext;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class MultipleActivity extends AppCompatActivity {
 
+public class MultipleActivity extends ActionBarActivity {
 
-    GridView gvMul;
-    MultipleAdapter multipleAdapter;
+    GridView gridView;
+    GridViewAdapter gridViewAdapter;
+    AlertDialog.Builder alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multiple);
+        setContentView(R.layout.activityyy_main);
+        gridView = (GridView) findViewById(R.id.gridViewMultiple);
+        gridViewAdapter = new GridViewAdapter(this, R.layout.model, getPDFs());
+        gridView.setAdapter(gridViewAdapter);
+        gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 
-        gvMul = (GridView) findViewById(R.id.gvMul);
-        multipleAdapter = new MultipleAdapter(MultipleActivity.this, getPDFs());
-        gvMul.setAdapter(multipleAdapter);
-        gvMul.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+        gridView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode arg0) {
+                gridViewAdapter.removeSelection();
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode arg0, Menu arg1) {
+                arg0.getMenuInflater().inflate(R.menu.main, arg1);
+
+                return true;
+            }
+
+            @Override
+            public boolean onActionItemClicked(final ActionMode arg0, MenuItem arg1) {
+                switch (arg1.getItemId()) {
+                    case R.id.deleteeee:
+                        final SparseBooleanArray selected = gridViewAdapter.getSelectedIds();
+
+                        AlertDialog alertDialog = new AlertDialog.Builder(MultipleActivity.this).create();
+                        alertDialog.setMessage("Do you really want to delete?");
+
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for (int i = (selected.size() - 1); i >= 0; i--) {
+                                    if (selected.valueAt(i)) {
+                                        PDFDoc selecteditem = gridViewAdapter.getItem(selected.keyAt(i));
+                                        File file = new File(selecteditem.getPath());
+                                        boolean deleted = file.delete();
+                                        if (deleted) {
+                                            gridViewAdapter.remove(selecteditem);
+                                            Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                arg0.finish();
+                            }
+                        });
+
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        alertDialog.show();
+
+                        return true;
 
 
-        gvMul.setMultiChoiceModeListener(new MultiChoiceModeListener());
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position,
+                                                  long id, boolean checked) {
+                final int checkedCount = gridView.getCheckedItemCount();
+                mode.setTitle(checkedCount + " Selected");
+                gridViewAdapter.toggleSelection(position);
+            }
+        });
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                gridView.setItemChecked(position, true);
+            }
+        });
+
     }
 
-
-    public class MultiChoiceModeListener implements
-            GridView.MultiChoiceModeListener {
-
-        @Override
-        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-            final int checkedCount = gvMul.getCheckedItemCount();
-            mode.setTitle(checkedCount + " Selected");
-            multipleAdapter.toggleSelection(position);
-        }
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.main, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-
-            return true;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-            switch (item.getItemId()) {
-                case R.id.deleteeee:
-                    SparseBooleanArray selected = multipleAdapter.getSelectedIds();
-
-                    for (int i = (selected.size() - 1); i >= 0; i--) {
-                        if (selected.valueAt(i)) {
-                            Object selecteditem = multipleAdapter.getItem(selected.keyAt(i));
-                            multipleAdapter.remove(selecteditem);
-                        }
-                    }
-                    mode.finish();
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            multipleAdapter.removeSelection();
-        }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), MainnnActivity.class));
     }
 
     private ArrayList<PDFDoc> getPDFs()

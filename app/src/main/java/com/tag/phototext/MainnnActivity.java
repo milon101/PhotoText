@@ -19,8 +19,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ public class MainnnActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
     String flag;
     int num;
+    ArrayList<PDFDoc> pdfDocs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +53,28 @@ public class MainnnActivity extends AppCompatActivity {
         gv = (GridView) findViewById(R.id.gv);
         customAdapter = new CustomAdapter(MainnnActivity.this, getPDFs());
         gv.setAdapter(customAdapter);
-
+        pdfDocs = new ArrayList<PDFDoc>();
+        pdfDocs = getPDFs();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         flag = mSharedPreferences.getString("gridValues", "1");
         num = Integer.parseInt(flag);
         gv.setNumColumns(num);
+        gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int position, long arg3) {
+                Toast.makeText(MainnnActivity.this, "LONG PRESS", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openPDFView(pdfDocs.get(position).getPath(), pdfDocs.get(position).getType());
+                Toast.makeText(MainnnActivity.this, "Short PRESS", Toast.LENGTH_SHORT).show();
+            }
+        });
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -75,6 +95,28 @@ public class MainnnActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void openPDFView(String path, String type) {
+
+        if (type.equalsIgnoreCase("pdf")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(path)), "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+            Intent intent1 = Intent.createChooser(intent, "Open File");
+            startActivity(intent1);
+//        Intent i=new Intent(c,PDF_Activity.class);
+//        i.putExtra("PATH",path);
+//        c.startActivity(i);
+        } else if (type.equalsIgnoreCase("txt")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(path)), "text/plain");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+            Intent intent1 = Intent.createChooser(intent, "Open File");
+            startActivity(intent1);
+        }
     }
 
     @Override
@@ -98,7 +140,7 @@ public class MainnnActivity extends AppCompatActivity {
                         boolean result = Utility.checkPermission(MainnnActivity.this);
 
                         if (items[item].equals("Select")) {
-                            startActivity(new Intent(getApplicationContext(), MainActivityyy.class));
+                            startActivity(new Intent(getApplicationContext(), MultipleActivity.class));
                             Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
