@@ -7,4 +7,9 @@
         android:icon="@android:drawable/ic_menu_share"
         android:title="Share"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/textToSpeech"
+        android:icon="@drawable/ic_action_speech"
+        android:title="Text to Speech"
+        app:showAsAction="always" />
 </menu>

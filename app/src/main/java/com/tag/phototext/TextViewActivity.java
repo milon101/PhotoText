@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class TextViewActivity extends AppCompatActivity {
 
@@ -33,6 +35,7 @@ public class TextViewActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     String name, flag;
     private Context mContext;
+    TextToSpeech textToSpeech;
 
     private SharedPreferences mSharedPreferences;
 
@@ -54,6 +57,14 @@ public class TextViewActivity extends AppCompatActivity {
         else
             textView.setText("Sorry !!! Nothing to show !!!");
 
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    textToSpeech.setLanguage(Locale.UK);
+                }
+            }
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -104,6 +115,11 @@ public class TextViewActivity extends AppCompatActivity {
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
                 startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+                return true;
+
+            case R.id.textToSpeech:
+                textToSpeech.speak(TextClass.stringBuilder.toString(), TextToSpeech.QUEUE_FLUSH, null);
+                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
