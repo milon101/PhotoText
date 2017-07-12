@@ -14,10 +14,12 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -45,7 +47,6 @@ public class MainnnActivity extends AppCompatActivity {
     String flag;
     int num;
     ArrayList<PDFDoc> pdfDocs;
-    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,20 +98,6 @@ public class MainnnActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        searchView = (SearchView) findViewById(R.id.search_bar);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                customAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
     }
 
     private void openPDFView(String path, String type) {
@@ -137,7 +124,22 @@ public class MainnnActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_more, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_more, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                customAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -192,22 +194,15 @@ public class MainnnActivity extends AppCompatActivity {
             File[] files = downloadsFolder.listFiles();
 
             //LOOP THRU THOSE FILES GETTING NAME AND URI
+
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
 
                 if (file.getPath().endsWith("pdf")) {
                     pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"pdf");
-                    pdfDoc.setName(file.getName());
-                    pdfDoc.setPath(file.getAbsolutePath());
-                    pdfDoc.setType("pdf");
-
                     pdfDocs.add(pdfDoc);
                 } else if (file.getPath().endsWith("txt")) {
                     pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"txt");
-                    pdfDoc.setName(file.getName());
-                    pdfDoc.setPath(file.getAbsolutePath());
-                    pdfDoc.setType("txt");
-
                     pdfDocs.add(pdfDoc);
                 }
 

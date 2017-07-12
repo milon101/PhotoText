@@ -7,20 +7,11 @@
     android:background="@color/colorMiddle"
     tools:context="com.tag.phototext.MainnnActivity"
     tools:showIn="@layout/activity_mainnn">
-
-    <SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </SearchView>
-
     <GridView
         android:id="@+id/gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_nav"
-        android:layout_below="@+id/search_bar"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="3"
