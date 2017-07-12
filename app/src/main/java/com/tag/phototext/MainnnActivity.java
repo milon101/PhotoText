@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.kyo.imagecrop.CropUtils;
@@ -44,6 +45,7 @@ public class MainnnActivity extends AppCompatActivity {
     String flag;
     int num;
     ArrayList<PDFDoc> pdfDocs;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,20 @@ public class MainnnActivity extends AppCompatActivity {
                         break;
                 }
                 return true;
+            }
+        });
+
+        searchView = (SearchView) findViewById(R.id.search_bar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                customAdapter.getFilter().filter(newText);
+                return false;
             }
         });
     }
@@ -180,14 +196,14 @@ public class MainnnActivity extends AppCompatActivity {
                 File file = files[i];
 
                 if (file.getPath().endsWith("pdf")) {
-                    pdfDoc = new PDFDoc();
+                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"pdf");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("pdf");
 
                     pdfDocs.add(pdfDoc);
                 } else if (file.getPath().endsWith("txt")) {
-                    pdfDoc = new PDFDoc();
+                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"txt");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("txt");

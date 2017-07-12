@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FFFF"
-            android:onClick="shareText"
+            android:layout_centerHorizontal="true"
             tools:text="faosjdf asdpofjaspoidjv sad" />
 
     </ScrollView>

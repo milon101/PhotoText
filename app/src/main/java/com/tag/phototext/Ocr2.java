@@ -1,5 +1,6 @@
 package com.tag.phototext;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -21,6 +22,10 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Ocr2 extends AppCompatActivity {
 
@@ -38,9 +43,6 @@ public class Ocr2 extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.imgView);
 
-//        if (TextClass.sbitmap.getHeight() < TextClass.sbitmap.getWidth())
-//            TextClass.sbitmap = RotateBitmap(TextClass.sbitmap, 90);
-
         imageView.setImageBitmap(TextClass.sbitmap);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav_ocr2);
 
@@ -49,8 +51,8 @@ public class Ocr2 extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.actionOcr:
-                        imageProcess();
-                       startActivity(new Intent(getApplicationContext(),TextViewActivity.class));
+                        inspectFromBitmap(TextClass.sbitmap);
+                        startActivity(new Intent(getApplicationContext(), TextViewActivity.class));
                         break;
                 }
                 return true;
@@ -65,48 +67,47 @@ public class Ocr2 extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
     }
 
-    public void imageProcess() {
 
-        // imageBitmap is the Bitmap image you're trying to process for text
-        if (TextClass.sbitmap != null) {
-
-            TextRecognizer textRecognizer = new TextRecognizer.Builder(this).build();
-
+    private void inspectFromBitmap(Bitmap bitmap) {
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(this).build();
+        try {
             if (!textRecognizer.isOperational()) {
+                new AlertDialog.
+                        Builder(this).
+                        setMessage("Text recognizer could not be set up on your device").show();
+                return;
+            }
 
-                Log.w(TAG, "Detector dependencies are not yet available.");
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<TextBlock> origTextBlocks = textRecognizer.detect(frame);
+            List<TextBlock> textBlocks = new ArrayList<>();
+            for (int i = 0; i < origTextBlocks.size(); i++) {
+                TextBlock textBlock = origTextBlocks.valueAt(i);
+                textBlocks.add(textBlock);
+            }
+            Collections.sort(textBlocks, new Comparator<TextBlock>() {
+                @Override
+                public int compare(TextBlock o1, TextBlock o2) {
+                    int diffOfTops = o1.getBoundingBox().top - o2.getBoundingBox().top;
+                    int diffOfLefts = o1.getBoundingBox().left - o2.getBoundingBox().left;
+                    if (diffOfTops != 0) {
+                        return diffOfTops;
+                    }
+                    return diffOfLefts;
+                }
+            });
 
-                // Check for low storage.  If there is low storage, the native library will not be
-                // downloaded, so detection will not become operational.
-                IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
-                boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
-
-                if (hasLowStorage) {
-                    Toast.makeText(this, "Low Storage", Toast.LENGTH_LONG).show();
-                    Log.w(TAG, "Low Storage");
+            TextClass.stringBuilder = new StringBuilder();
+            for (TextBlock textBlock : textBlocks) {
+                if (textBlock != null && textBlock.getValue() != null) {
+                    TextClass.stringBuilder.append(textBlock.getValue());
+                    TextClass.stringBuilder.append("\n");
                 }
             }
 
-
-            Frame imageFrame = new Frame.Builder()
-                    .setBitmap(TextClass.sbitmap)
-                    .build();
-
-            SparseArray<TextBlock> textBlocks = textRecognizer.detect(imageFrame);
-            TextClass.stringBuilder = new StringBuilder();
-            for (int i = 0; i < textBlocks.size(); i++) {
-
-                TextBlock textBlock = textBlocks.get(textBlocks.keyAt(i));
-
-                String text = textBlock.getValue();
-
-                TextClass.stringBuilder.append(text);
-                TextClass.stringBuilder.append("\n");
-
-            }
-
+        } finally {
+            textRecognizer.release();
         }
-
     }
 
 
@@ -129,10 +130,4 @@ public class Ocr2 extends AppCompatActivity {
         }
     }
 
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-}
+ }

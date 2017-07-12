@@ -3,7 +3,13 @@ package com.tag.phototext;
 public class PDFDoc {
     String name, path, type;
     Boolean checked=false;
+    private String num;
 
+    public PDFDoc(String name, String path, String type) {
+        this.name = name;
+        this.path = path;
+        this.type = type;
+    }
 
     public void setType(String type) {
         this.type = type;
@@ -38,5 +44,9 @@ public class PDFDoc {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getNum() {
+        return num;
     }
 }

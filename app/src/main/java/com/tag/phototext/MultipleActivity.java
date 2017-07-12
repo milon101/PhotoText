@@ -140,14 +140,14 @@ public class MultipleActivity extends ActionBarActivity {
                 File file = files[i];
 
                 if (file.getPath().endsWith("pdf")) {
-                    pdfDoc = new PDFDoc();
+                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"pdf");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("pdf");
 
                     pdfDocs.add(pdfDoc);
                 } else if (file.getPath().endsWith("txt")) {
-                    pdfDoc = new PDFDoc();
+                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"txt");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("txt");

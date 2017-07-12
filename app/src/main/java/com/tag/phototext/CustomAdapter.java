@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,10 +23,12 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-public class CustomAdapter extends BaseAdapter {
+public class CustomAdapter extends BaseAdapter implements Filterable {
 
     Context c;
     ArrayList<PDFDoc> pdfDocs;
+    ArrayList<PDFDoc> filterList;
+    CustomFilter filter;
     String string1, string, result;
     File newFile, currentFile;
     private AlertDialog.Builder firstDialogBuilder;
@@ -38,6 +42,7 @@ public class CustomAdapter extends BaseAdapter {
         mSelectedItemsIds = new SparseBooleanArray();
         this.c = c;
         this.pdfDocs = pdfDocs;
+        this.filterList = pdfDocs;
     }
 
     @Override
@@ -216,14 +221,14 @@ public class CustomAdapter extends BaseAdapter {
                 File file = files[i];
 
                 if (file.getPath().endsWith("pdf")) {
-                    pdfDoc = new PDFDoc();
+                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"pdf");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("pdf");
 
                     pdfDocs.add(pdfDoc);
                 } else if (file.getPath().endsWith("txt")) {
-                    pdfDoc = new PDFDoc();
+                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"txt");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("txt");
@@ -259,9 +264,6 @@ public class CustomAdapter extends BaseAdapter {
 
             Intent intent1 = Intent.createChooser(intent, "Open File");
             c.startActivity(intent1);
-//        Intent i=new Intent(c,PDF_Activity.class);
-//        i.putExtra("PATH",path);
-//        c.startActivity(i);
         } else if (type.equalsIgnoreCase("txt")) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(new File(path)), "text/plain");
@@ -305,5 +307,45 @@ public class CustomAdapter extends BaseAdapter {
 
     public SparseBooleanArray getSelectedIds() {
         return mSelectedItemsIds;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new CustomFilter();
+        }
+        return filter;
+    }
+
+    class CustomFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                constraint = constraint.toString().toUpperCase();
+                ArrayList<PDFDoc> filters = new ArrayList<>();
+
+                for (int i = 0; i < filterList.size(); i++) {
+                    if (filterList.get(i).getName().toUpperCase().contains(constraint)) {
+                        PDFDoc p = new PDFDoc(filterList.get(i).getName(), filterList.get(i).getPath(), filterList.get(i).getType());
+                        filters.add(p);
+                    }
+                }
+                filterResults.count = filters.size();
+                filterResults.values = filters;
+            } else {
+                filterResults.count = filterList.size();
+                filterResults.values = filterList;
+            }
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            pdfDocs = (ArrayList<PDFDoc>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

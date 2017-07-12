@@ -16,7 +16,6 @@
 package com.tag.phototext;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -27,7 +26,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.Display;
 import android.view.MenuItem;
-
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -50,7 +48,7 @@ public class CropActivity extends Activity {
     RelativeLayout.LayoutParams fullScreenParams;
     int fullWidth = 0;
     int fullHeight = 0;
-    public boolean flag=false;
+    public boolean flag = false;
     private static String LOGTAG = "CameraActivity";
 
     @Override
@@ -94,21 +92,21 @@ public class CropActivity extends Activity {
                         break;
 
                     case R.id.crop169:
-                        if(flag==false) {
+                        if (flag == false) {
                             item.setIcon(R.drawable.ic_action_crop169);
                             item.setTitle("16:9");
                             mCropLayout.startCropImage(sourceUri, 720, 1280);
                             mCropLayout.setOutputFormat(outputFormat);
 
-                            flag=true;
+                            flag = true;
                             break;
                         }
-                        if (flag==true) {
+                        if (flag == true) {
                             item.setIcon(R.drawable.ic_action_crop_portrait);
                             item.setTitle("Portrait");
                             mCropLayout.startCropImage(sourceUri, 1280, 720);
                             mCropLayout.setOutputFormat(outputFormat);
-                            flag=false;
+                            flag = false;
                             break;
                         }
                         break;
@@ -135,21 +133,21 @@ public class CropActivity extends Activity {
                         break;
 
                     case R.id.crop169:
-                        if(flag==false) {
+                        if (flag == false) {
                             item.setIcon(R.drawable.ic_action_crop169);
                             item.setTitle("16:9");
                             mCropLayout.startCropImage(sourceUri, 720, 1280);
                             mCropLayout.setOutputFormat(outputFormat);
 
-                            flag=true;
+                            flag = true;
                             break;
                         }
-                        if (flag==true) {
+                        if (flag == true) {
                             item.setIcon(R.drawable.ic_action_crop_portrait);
                             item.setTitle("Portrait");
                             mCropLayout.startCropImage(sourceUri, 1280, 720);
                             mCropLayout.setOutputFormat(outputFormat);
-                            flag=false;
+                            flag = false;
                             break;
                         }
                         break;
@@ -164,7 +162,7 @@ public class CropActivity extends Activity {
                         break;
 
                     case R.id.brightness:
-                        BrightnessFragment crimeFragment=new BrightnessFragment();
+                        BrightnessFragment crimeFragment = new BrightnessFragment();
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         BrightnessFragment hello = new BrightnessFragment();
@@ -177,6 +175,7 @@ public class CropActivity extends Activity {
         });
 
     }
+
 
 //    private OnClickListener mOnClickListener = new OnClickListener() {
 //
