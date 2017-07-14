@@ -102,7 +102,7 @@ public class CameraActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TextActivity.class));
+                startActivity(new Intent(getApplicationContext(), TextEditFragment.class));
             }
         });
 

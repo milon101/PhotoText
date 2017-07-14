@@ -1,5 +1,8 @@
 package com.tag.phototext;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +15,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +40,11 @@ public class TextViewActivity extends AppCompatActivity {
     String name, flag;
     private Context mContext;
     TextToSpeech textToSpeech;
+    RelativeLayout relativeLayout;
+    boolean check, isCheck = false;
 
     private SharedPreferences mSharedPreferences;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,7 @@ public class TextViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text_view);
 
         mContext = getApplicationContext();
-        textView = (TextView) findViewById(R.id.textVieww);
+        textView = (TextView) findViewById(R.id.switchTextVieww);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_TextView_nav);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         if (!TextClass.stringBuilder.toString().isEmpty())
@@ -71,7 +78,12 @@ public class TextViewActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.textEdt:
-                        startActivity(new Intent(getApplicationContext(), TextActivity.class));
+                        fragment = new TextEditFragment();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction frgmentTransaction = fragmentManager.beginTransaction();
+                        frgmentTransaction.replace(R.id.fragment_place, fragment);
+                        frgmentTransaction.commit();
+                        ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         break;
                     case R.id.textDne:
                         if (flag.equalsIgnoreCase("1")) {
@@ -82,12 +94,34 @@ public class TextViewActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
                         }
                         break;
+                    case R.id.switchImage:
+                        if (check == false) {
+                            fragment = new SwitchFragmentImage();
+                            FragmentManager fm = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_place, fragment);
+                            fragmentTransaction.commit();
+                            item.setIcon(R.drawable.ic_action_text);
+                            item.setTitle("Text");
+                            check = true;
+                            break;
+                        }
+                        if (check == true) {
+                            fragment = new SwitchFragmentText();
+                            FragmentManager fm = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_place, fragment);
+                            fragmentTransaction.commit();
+                            item.setIcon(R.drawable.ic_action_image);
+                            item.setTitle("Image");
+                            check = false;
+                            break;
+                        }
                 }
                 return true;
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,9 +143,19 @@ public class TextViewActivity extends AppCompatActivity {
                 return true;
 
             case R.id.textToSpeech:
-                textToSpeech.speak(TextClass.stringBuilder.toString(), TextToSpeech.QUEUE_FLUSH, null);
-                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
-                return true;
+                if (isCheck == false) {
+                    textToSpeech.speak(TextClass.stringBuilder.toString(), TextToSpeech.QUEUE_FLUSH, null);
+                    Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                    item.setIcon(R.drawable.ic_action_volume_off);
+                    isCheck = true;
+                    return true;
+                }
+                if (isCheck == true) {
+                    textToSpeech.stop();
+                    item.setIcon(R.drawable.ic_action_speech);
+                    isCheck = false;
+                    return true;
+                }
 
             default:
                 return super.onOptionsItemSelected(item);
