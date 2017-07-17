@@ -147,7 +147,7 @@ public class MainnnActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionMore:
-                final CharSequence[] items = {"Select", "Remove",
+                final CharSequence[] items = {"Select", "Drive",
                         "Cancel"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainnnActivity.this);
@@ -162,6 +162,9 @@ public class MainnnActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
+                        } else if (items[item].equals("Drive")) {
+                            startActivity(new Intent(getApplicationContext(), DriveActivity.class));
+                            Toast.makeText(getApplicationContext(), "Drive", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -199,10 +202,10 @@ public class MainnnActivity extends AppCompatActivity {
                 File file = files[i];
 
                 if (file.getPath().endsWith("pdf")) {
-                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"pdf");
+                    pdfDoc = new PDFDoc(file.getName(), file.getAbsolutePath(), "pdf");
                     pdfDocs.add(pdfDoc);
                 } else if (file.getPath().endsWith("txt")) {
-                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"txt");
+                    pdfDoc = new PDFDoc(file.getName(), file.getAbsolutePath(), "txt");
                     pdfDocs.add(pdfDoc);
                 }
 

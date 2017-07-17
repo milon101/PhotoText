@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -26,8 +27,8 @@
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,8 +58,8 @@
         <activity android:name=".SaveActivity" />
         <activity
             android:name=".TextViewActivity"
-            android:theme="@style/AppBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBar" />
         <activity
             android:name=".MainnnActivity"
             android:exported="true"
@@ -76,6 +77,12 @@
             android:exported="true"
             android:theme="@style/AppBar" />
         <activity android:name=".MultipleActivity" />
+        <activity android:name=".DriveActivity"></activity>
+        <activity android:name=".DriveeeActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
