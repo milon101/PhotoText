@@ -46,9 +46,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
         <activity android:name=".Main2Activity" />
         <activity android:name=".Main3Activity" />
         <activity
@@ -79,6 +76,9 @@
         <activity android:name=".MultipleActivity" />
         <activity android:name=".DriveActivity"></activity>
         <activity android:name=".DriveeeActivity"></activity>
+        <activity android:name=".CreateFolderActivity"></activity>
+        <activity android:name=".CreateFileInFolderActivity"></activity>
+        <activity android:name=".MyDriveActivity"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
