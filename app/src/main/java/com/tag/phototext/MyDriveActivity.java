@@ -16,8 +16,8 @@ package com.tag.phototext;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -30,10 +30,13 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Query;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,13 +58,15 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
     private DriveId mFolderDriveId = DriveId.decodeFromString(TextClass.MineID);
     ArrayList<PDFDoc> pdfDocs;
     DriveFolder folder;
+    boolean flag = true;
+    ArrayList<String> fileName;
 
     private GoogleApiClient mGoogleApiClient;
 
     /**
      * Create a new file and save it to Drive.
      */
-    private void saveFileToDrive() {
+    private void saveFileToDrive(final String Path, final String Name) {
         // Start by creating a new contents, and setting a callback.
         Log.i(TAG, "Creating new contents.");
         Drive.DriveApi.newDriveContents(mGoogleApiClient)
@@ -76,14 +81,21 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                             Log.i(TAG, "Failed to create new contents.");
                             return;
                         }
+
+                        for (int i = 0; i < fileName.size(); i++) {
+                            Log.i("suspended", Name + "Nmae\n");
+                            Log.i("suspended", fileName.get(i) + "fileNmae\n");
+                            if (Name.equalsIgnoreCase(fileName.get(i))) {
+                                return;
+                            }
+                        }
+
                         // Otherwise, we can write our data to the new contents.
                         Log.i(TAG, "New contents created.");
 
-                        folder = mFolderDriveId.asDriveFolder();
-
                         // Get an output stream for the contents.
                         OutputStream outputStream = result.getDriveContents().getOutputStream();
-                        String path = Environment.getExternalStorageDirectory() + "/Photo Text/huh.pdf";
+                        String path = Path;
                         File f = new File(path);
 
                         byte[] buf = new byte[8192];
@@ -107,12 +119,14 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                         // Create the initial metadata - MIME type and title.
                         // Note that the user will be able to change the title later.
                         MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                                .setMimeType("application/pdf").setTitle("Android Pdf.pdf").build();
+                                .setMimeType("application/pdf").setTitle(Name).build();
 
                         folder.createFile(mGoogleApiClient, metadataChangeSet, result.getDriveContents())
                                 .setResultCallback(fileCallback);
                     }
+
                 });
+
     }
 
     final private ResultCallback<DriveFolder.DriveFileResult> fileCallback =
@@ -215,8 +229,37 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
         Log.i(TAG, "API client connected.");
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
-        saveFileToDrive();
+        fileName = new ArrayList<>();
+        folder = mFolderDriveId.asDriveFolder();
+
+        folder.listChildren(mGoogleApiClient)
+                .setResultCallback(metadataResult);
+
     }
+
+    final private ResultCallback<DriveApi.MetadataBufferResult> metadataResult = new
+            ResultCallback<DriveApi.MetadataBufferResult>() {
+                @Override
+                public void onResult(DriveApi.MetadataBufferResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        //showMessage("Problem while retrieving files");
+                        return;
+                    }
+
+                    fileName.clear();
+                    for (int i = 0; i < result.getMetadataBuffer().getCount(); i++) {
+                        Metadata metadata = result.getMetadataBuffer().get(i);
+                        fileName.add(metadata.getTitle());
+                        //showMessage(fileName.get(i));
+                    }
+                    for (int i = 0; i < pdfDocs.size(); i++) {
+                        saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName());
+                    }
+
+                    //showMessage("Successfully listed files." + fileName.size()+"    "+result.getMetadataBuffer().getCount() +"  "+pdfDocs.size());
+                }
+            };
+
 
     @Override
     public void onConnectionSuspended(int cause) {

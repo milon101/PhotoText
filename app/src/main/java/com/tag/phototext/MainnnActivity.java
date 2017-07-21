@@ -43,7 +43,8 @@ public class MainnnActivity extends AppCompatActivity {
     GridView gv;
     CustomAdapter customAdapter;
     Context context;
-    private SharedPreferences mSharedPreferences;
+    private SharedPreferences mSharedPreferences, sharedPreferences;
+    SharedPreferences.Editor editor;
     String flag;
     int num;
     ArrayList<PDFDoc> pdfDocs;
@@ -58,7 +59,11 @@ public class MainnnActivity extends AppCompatActivity {
         gv.setAdapter(customAdapter);
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
+        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = sharedPreferences.edit();
+        editor.putBoolean("bo", true);
+        editor.commit();
         flag = mSharedPreferences.getString("gridValues", "1");
         num = Integer.parseInt(flag);
         gv.setNumColumns(num);
@@ -123,6 +128,17 @@ public class MainnnActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (sharedPreferences.getBoolean("bo", true)) {
+            editor.putBoolean("bo", false);
+            editor.commit();
+        }
+        editor.putString("id", TextClass.MineID);
+        editor.commit();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_more, menu);
@@ -147,7 +163,7 @@ public class MainnnActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionMore:
-                final CharSequence[] items = {"Select", "Drive", "DriveFile",
+                final CharSequence[] items = {"Select", "Drive", "DriveFile", "List Files",
                         "Cancel"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainnnActivity.this);
@@ -166,8 +182,15 @@ public class MainnnActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
                             Toast.makeText(getApplicationContext(), "Drive", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("DriveFile")) {
+                            if (sharedPreferences.getBoolean("bo", true)) {
+                                TextClass.MineID = sharedPreferences.getString("id", null);
+                            }
                             startActivity(new Intent(getApplicationContext(), MyDriveActivity.class));
                             Toast.makeText(getApplicationContext(), "DriveFile", Toast.LENGTH_SHORT).show();
+
+                        } else if (items[item].equals("List Files")) {
+                            startActivity(new Intent(getApplicationContext(), ListFilesInFolderActivity.class));
+                            Toast.makeText(getApplicationContext(), "ListFile", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
