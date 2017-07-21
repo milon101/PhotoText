@@ -16,4 +16,24 @@
         android:summary="No. of items in a row"
         android:title="Items in a row"></ListPreference>
 
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/rename"
+        android:entryValues="@array/rename"
+        android:key="rename"
+        android:summary="Rename with first five digit or manual"
+        android:title="Rename">
+
+    </ListPreference>
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/camera"
+        android:entryValues="@array/camera"
+        android:key="camera"
+        android:summary="Start with camera or previous page"
+        android:title="Start Page">
+
+    </ListPreference>
+
 </PreferenceScreen>

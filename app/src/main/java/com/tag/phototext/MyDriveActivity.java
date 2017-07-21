@@ -15,9 +15,10 @@
 package com.tag.phototext;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -36,7 +37,6 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.drive.query.Query;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,18 +55,20 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
 
     private static final String TAG = "drive-quickstart";
     private static final int REQUEST_CODE_RESOLUTION = 3;
-    private DriveId mFolderDriveId = DriveId.decodeFromString(TextClass.MineID);
+    private DriveId mFolderDriveId;
     ArrayList<PDFDoc> pdfDocs;
     DriveFolder folder;
     boolean flag = true;
     ArrayList<String> fileName;
+    String mime_pdf = "application/pdf", mime_text = "text/plain";
+    public String Level=null;
 
     private GoogleApiClient mGoogleApiClient;
 
     /**
      * Create a new file and save it to Drive.
      */
-    private void saveFileToDrive(final String Path, final String Name) {
+    private void saveFileToDrive(final String Path, final String Name, final String MIME_TYPE) {
         // Start by creating a new contents, and setting a callback.
         Log.i(TAG, "Creating new contents.");
         Drive.DriveApi.newDriveContents(mGoogleApiClient)
@@ -119,7 +121,7 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                         // Create the initial metadata - MIME type and title.
                         // Note that the user will be able to change the title later.
                         MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                                .setMimeType("application/pdf").setTitle(Name).build();
+                                .setMimeType(MIME_TYPE).setTitle(Name).build();
 
                         folder.createFile(mGoogleApiClient, metadataChangeSet, result.getDriveContents())
                                 .setResultCallback(fileCallback);
@@ -128,6 +130,18 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                 });
 
     }
+
+    private String loadData() {
+        SharedPreferences sharedPreferences =
+                getSharedPreferences("MyPrefs",
+                        Context.MODE_PRIVATE);
+        String l = sharedPreferences.getString("level", null);
+        if (l==null){
+            Toast.makeText(getApplicationContext(),"Loaded",Toast.LENGTH_SHORT).show();
+        }
+        return l;
+    }
+
 
     final private ResultCallback<DriveFolder.DriveFileResult> fileCallback =
             new ResultCallback<DriveFolder.DriveFileResult>() {
@@ -230,6 +244,7 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
         fileName = new ArrayList<>();
+        mFolderDriveId = DriveId.decodeFromString(loadData());
         folder = mFolderDriveId.asDriveFolder();
 
         folder.listChildren(mGoogleApiClient)
@@ -253,7 +268,10 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                         //showMessage(fileName.get(i));
                     }
                     for (int i = 0; i < pdfDocs.size(); i++) {
-                        saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName());
+                        if (pdfDocs.get(i).getType().equals(".pdf"))
+                            saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName(), mime_pdf);
+                        else
+                            saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName(), mime_text);
                     }
 
                     //showMessage("Successfully listed files." + fileName.size()+"    "+result.getMetadataBuffer().getCount() +"  "+pdfDocs.size());

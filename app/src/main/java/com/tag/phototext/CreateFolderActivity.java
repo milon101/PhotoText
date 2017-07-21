@@ -14,8 +14,11 @@
 
 package com.tag.phototext;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -44,8 +47,19 @@ public class CreateFolderActivity extends BaseDemoActivity {
                 return;
             }
             showMessage("Created a folder: " + result.getDriveFolder().getDriveId());
-            TextClass.MineID = result.getDriveFolder().getDriveId().toString();
+            saveData(result.getDriveFolder().getDriveId().toString());
             Log.i("Folder", result.getDriveFolder().getDriveId().toString());
         }
     };
+
+    private void saveData(String data) {
+        SharedPreferences sp =
+                getSharedPreferences("MyPrefs",
+                        Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("level", data);
+        editor.apply();
+        editor.commit();
+        Toast.makeText(getApplicationContext(),"Shared",Toast.LENGTH_SHORT).show();
+    }
 }

@@ -2,7 +2,10 @@ package com.tag.phototext;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -11,6 +14,7 @@ import android.graphics.Point;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -53,6 +57,8 @@ public class CameraTestActivity extends AppCompatActivity {
     private ImageButton cameraFlash = null;
     private RelativeLayout cameraLayout = null;
     private Toolbar toolbar;
+    SharedPreferences sharedPreferences;
+    String flag1;
 
     private LinearLayout parentView;
 
@@ -160,6 +166,9 @@ public class CameraTestActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_test);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        flag1 = sharedPreferences.getString("camera", "1");
+
         flipCamera = (ImageButton) findViewById(R.id.button_flip);
         flipCamera.setVisibility(View.VISIBLE);
         flipCamera.setOnClickListener(OnFlip);
@@ -222,6 +231,37 @@ public class CameraTestActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (flag1.equalsIgnoreCase("camera")) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Exit Application?");
+            alertDialogBuilder
+                    .setMessage("Click yes to exit!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(1);
+                                }
+                            })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        } else {
+            startActivity(new Intent(getApplicationContext(), MainnnActivity.class));
+        }
     }
 
     @Override

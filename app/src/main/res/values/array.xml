@@ -16,4 +16,14 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <string-array name="rename">
+        <item>Auto</item>
+        <item>Manual</item>
+    </string-array>
+
+    <string-array name="camera">
+        <item>Camera</item>
+        <item>Previous</item>
+    </string-array>
 </resources>

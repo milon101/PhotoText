@@ -14,8 +14,9 @@
 
 package com.tag.phototext;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.DriveApi.MetadataBufferResult;
@@ -29,8 +30,8 @@ import com.google.android.gms.drive.Metadata;
  */
 public class ListFilesInFolderActivity extends BaseDemoActivity {
 
-
-    private DriveId mFolderDriveId = DriveId.decodeFromString(TextClass.MineID);
+    public String Level;
+    private DriveId mFolderDriveId = DriveId.decodeFromString(loadData());
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -47,6 +48,14 @@ public class ListFilesInFolderActivity extends BaseDemoActivity {
         folder.listChildren(getGoogleApiClient())
                 .setResultCallback(metadataResult);
 
+    }
+
+    private String loadData() {
+        SharedPreferences sp =
+                getSharedPreferences("MyPrefs",
+                        Context.MODE_PRIVATE);
+        Level = sp.getString("level", Level);
+        return Level;
     }
 
 

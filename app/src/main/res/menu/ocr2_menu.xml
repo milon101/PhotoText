@@ -3,10 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/reCrop"
+        android:icon="@drawable/ic_action_recrop"
+        android:title="Recrop"
+        app:showAsAction="always"></item>
+
+    <item
         android:id="@+id/actionOcr"
-        android:title="Scan"
         android:icon="@drawable/ic_action_ocr"
-        app:showAsAction="always"
-        />
+        android:title="Scan"
+        app:showAsAction="always" />
 
 </menu>

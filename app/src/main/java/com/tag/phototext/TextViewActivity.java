@@ -37,7 +37,7 @@ public class TextViewActivity extends AppCompatActivity {
 
     TextView textView;
     BottomNavigationView bottomNavigationView;
-    String name, flag;
+    String name, flag, rename;
     private Context mContext;
     TextToSpeech textToSpeech;
     RelativeLayout relativeLayout;
@@ -58,6 +58,7 @@ public class TextViewActivity extends AppCompatActivity {
         if (!TextClass.stringBuilder.toString().isEmpty())
             name = TextClass.stringBuilder.toString().substring(0, 5);
         flag = mSharedPreferences.getString("outputType", "1");
+        rename = mSharedPreferences.getString("rename", "1");
 
         if (!TextClass.stringBuilder.toString().isEmpty())
             textView.setText(TextClass.stringBuilder.toString());
@@ -83,15 +84,20 @@ public class TextViewActivity extends AppCompatActivity {
                         FragmentTransaction frgmentTransaction = fragmentManager.beginTransaction();
                         frgmentTransaction.replace(R.id.fragment_place, fragment);
                         frgmentTransaction.commit();
-                        ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         break;
                     case R.id.textDne:
-                        if (flag.equalsIgnoreCase("1")) {
-                            createPdf();
-                            startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
-                        } else if (flag.equalsIgnoreCase("2")) {
-                            writeToFile(TextClass.stringBuilder.toString(), getApplicationContext());
-                            startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                        if (rename.equalsIgnoreCase("Auto")) {
+                            if (flag.equalsIgnoreCase("1")) {
+                                createPdf();
+                                startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                            } else if (flag.equalsIgnoreCase("2")) {
+                                writeToFile(TextClass.stringBuilder.toString(), getApplicationContext());
+                                startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                            }
+                        } else {
+                            startActivity(new Intent(getApplicationContext(), SaveActivity.class));
+                            Toast.makeText(getApplicationContext(),"pressed",Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.switchImage:

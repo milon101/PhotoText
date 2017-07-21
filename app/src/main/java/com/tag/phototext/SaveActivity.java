@@ -2,13 +2,16 @@ package com.tag.phototext;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.itextpdf.text.Document;
@@ -24,37 +27,50 @@ import java.io.OutputStreamWriter;
 public class SaveActivity extends AppCompatActivity {
 
     EditText save;
-    ImageButton finalSave;
-    RadioButton radioButtonTxt, radioButtonPdf;
+    BottomNavigationView bottomNavigationView;
+    TextInputLayout til;
+    SharedPreferences sharedPreferences;
+    String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save);
-        save = (EditText) findViewById(R.id.saveName);
-        finalSave = (ImageButton) findViewById(R.id.finalSave);
-        radioButtonTxt = (RadioButton) findViewById(R.id.radioButtonTxt);
-        radioButtonPdf = (RadioButton) findViewById(R.id.radioButtonPdf);
+        save = (EditText) findViewById(R.id.edit_text_save);
+        til = (TextInputLayout) findViewById(R.id.text_input_layout);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_nav_saveFinal);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        flag = sharedPreferences.getString("outputType", "1");
 
-
-        finalSave.setOnClickListener(new View.OnClickListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                if (radioButtonPdf.isChecked()) {
-                    createPdf(view);
-                    Toast.makeText(getApplicationContext(), "Saved to Photo Text",
-                            Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
-                } else if (radioButtonTxt.isChecked()) {
-                    writeToFile(TextClass.stringBuilder.toString(), getApplicationContext());
-                    startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.saveFinal:
+                        if (flag.equalsIgnoreCase("1")) {
+                            if (save.getText().toString().isEmpty()) {
+                                til.setError("You need to enter a name");
+                            } else {
+                                createPdf();
+                                startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                            }
+                        } else if (flag.equalsIgnoreCase("2")) {
+                            if (save.getText().toString().isEmpty()) {
+                                til.setError("You need to enter a name");
+                            } else {
+                                writeToFile(TextClass.stringBuilder.toString(), getApplicationContext());
+                                startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                            }
+                        }
+                        break;
                 }
+                return false;
             }
         });
 
     }
 
-    public void createPdf(View view) {
+    public void createPdf() {
         Document doc = new Document();
         File folder = new File(Environment.getExternalStorageDirectory() +
                 File.separator + "Photo Text");
@@ -78,6 +94,7 @@ public class SaveActivity extends AppCompatActivity {
 
     private void writeToFile(String data, Context context) {
         try {
+
             File myFile = new File("/sdcard/Photo Text/" + save.getText() + ".txt");
             myFile.createNewFile();
             FileOutputStream fOut = new FileOutputStream(myFile);

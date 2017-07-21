@@ -44,8 +44,7 @@ public class MainnnActivity extends AppCompatActivity {
     CustomAdapter customAdapter;
     Context context;
     private SharedPreferences mSharedPreferences, sharedPreferences;
-    SharedPreferences.Editor editor;
-    String flag;
+    String flag, flag1;
     int num;
     ArrayList<PDFDoc> pdfDocs;
 
@@ -59,12 +58,11 @@ public class MainnnActivity extends AppCompatActivity {
         gv.setAdapter(customAdapter);
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
-        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = sharedPreferences.edit();
-        editor.putBoolean("bo", true);
-        editor.commit();
         flag = mSharedPreferences.getString("gridValues", "1");
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        flag1 = sharedPreferences.getString("camera", "1");
         num = Integer.parseInt(flag);
         gv.setNumColumns(num);
         gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -105,6 +103,37 @@ public class MainnnActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if (flag1.equalsIgnoreCase("previous")) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Exit Application?");
+            alertDialogBuilder
+                    .setMessage("Click yes to exit!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(1);
+                                }
+                            })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        } else {
+            startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+        }
+    }
+
     private void openPDFView(String path, String type) {
 
         if (type.equalsIgnoreCase("pdf")) {
@@ -130,12 +159,6 @@ public class MainnnActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (sharedPreferences.getBoolean("bo", true)) {
-            editor.putBoolean("bo", false);
-            editor.commit();
-        }
-        editor.putString("id", TextClass.MineID);
-        editor.commit();
     }
 
     @Override
@@ -182,9 +205,6 @@ public class MainnnActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
                             Toast.makeText(getApplicationContext(), "Drive", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("DriveFile")) {
-                            if (sharedPreferences.getBoolean("bo", true)) {
-                                TextClass.MineID = sharedPreferences.getString("id", null);
-                            }
                             startActivity(new Intent(getApplicationContext(), MyDriveActivity.class));
                             Toast.makeText(getApplicationContext(), "DriveFile", Toast.LENGTH_SHORT).show();
 

@@ -14,7 +14,7 @@ public class TextClass {
     static Uri sUri;
     static Bitmap sbitmap;
     static int cropSize;
-    static String MineID;
+//    static String MineID;
     static ArrayList<String> name;
 
 }

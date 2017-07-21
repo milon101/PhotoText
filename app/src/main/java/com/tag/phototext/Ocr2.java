@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.kyo.imagecrop.CropUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class Ocr2 extends AppCompatActivity {
                         inspectFromBitmap(TextClass.sbitmap);
                         startActivity(new Intent(getApplicationContext(), TextViewActivity.class));
                         break;
+                    case R.id.reCrop:
+                        startCropper();
                 }
                 return true;
             }
@@ -108,6 +111,25 @@ public class Ocr2 extends AppCompatActivity {
         } finally {
             textRecognizer.release();
         }
+    }
+
+    private void startCropper() {
+        Uri uri = null;
+        uri = TextClass.sUri;
+//        if (requestCode == REQUEST_CAMERA) {
+//            uri = TextClass.sUri;
+//        } else if (uri != null) {
+//            uri = TextClass.sUri;
+//        }
+        Intent intent = new Intent(getApplicationContext(), CropActivity.class);
+        intent.setData(uri);
+        intent.putExtra("outputX", CropUtils.dip2px(this, 300));
+        intent.putExtra("outputY", CropUtils.dip2px(this, 150));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        startActivity(intent);
+
+        //Log.w(LOGTAG, "Uri Found starto");
+
     }
 
 

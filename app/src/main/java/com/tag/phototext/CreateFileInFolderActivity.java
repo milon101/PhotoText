@@ -14,6 +14,8 @@
 
 package com.tag.phototext;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.gms.common.api.ResultCallback;
@@ -36,7 +38,8 @@ import java.io.Writer;
  */
 public class CreateFileInFolderActivity extends BaseDemoActivity {
 
-    private DriveId mFolderDriveId = DriveId.decodeFromString(TextClass.MineID);
+    public String Level;
+    private DriveId mFolderDriveId = DriveId.decodeFromString(loadData());
     DriveFolder folder;
 
 
@@ -47,6 +50,14 @@ public class CreateFileInFolderActivity extends BaseDemoActivity {
         Drive.DriveApi.newDriveContents(getGoogleApiClient())
                 .setResultCallback(driveContentsCallback);
 
+    }
+
+    private String loadData() {
+        SharedPreferences sp =
+                getSharedPreferences("MyPrefs",
+                        Context.MODE_PRIVATE);
+        Level = sp.getString("level", Level);
+        return Level;
     }
 
 
@@ -86,7 +97,6 @@ public class CreateFileInFolderActivity extends BaseDemoActivity {
 
                 }
             };
-
 
 
     final private ResultCallback<DriveFileResult> fileCallback =
