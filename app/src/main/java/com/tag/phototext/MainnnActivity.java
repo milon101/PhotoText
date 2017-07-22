@@ -205,7 +205,9 @@ public class MainnnActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
                             Toast.makeText(getApplicationContext(), "Drive", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("DriveFile")) {
-                            startActivity(new Intent(getApplicationContext(), MyDriveActivity.class));
+                            //startActivity(new Intent(getApplicationContext(), MyDriveActivity.class));
+                            Bundle connectionHint = null;
+                            new MyDriveActivity(getApplicationContext());
                             Toast.makeText(getApplicationContext(), "DriveFile", Toast.LENGTH_SHORT).show();
 
                         } else if (items[item].equals("List Files")) {

@@ -21,11 +21,11 @@ import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -50,7 +50,7 @@ import java.util.ArrayList;
  * in Google Drive. The user is prompted with a pre-made dialog which allows
  * them to choose the file location.
  */
-public class MyDriveActivity extends Activity implements ConnectionCallbacks,
+public class MyDriveActivity implements ConnectionCallbacks,
         OnConnectionFailedListener {
 
     private static final String TAG = "drive-quickstart";
@@ -61,13 +61,34 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
     boolean flag = true;
     ArrayList<String> fileName;
     String mime_pdf = "application/pdf", mime_text = "text/plain";
-    public String Level=null;
+    public String Level = null;
+    Context c;
 
     private GoogleApiClient mGoogleApiClient;
+
+    public MyDriveActivity(Context c) {
+        this.c = c;
+        if (mGoogleApiClient == null) {
+//            // Create the API client and bind it to an instance variable.
+//            // We use this instance as the callback for connection and connection
+//            // failures.
+//            // Since no account name is passed, the user is prompted to choose.
+            mGoogleApiClient = new GoogleApiClient.Builder(c)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_FILE)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+        // Connect the client. Once connected, the camera is launched.
+        mGoogleApiClient.connect();
+    }
 
     /**
      * Create a new file and save it to Drive.
      */
+
+
     private void saveFileToDrive(final String Path, final String Name, final String MIME_TYPE) {
         // Start by creating a new contents, and setting a callback.
         Log.i(TAG, "Creating new contents.");
@@ -133,11 +154,11 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
 
     private String loadData() {
         SharedPreferences sharedPreferences =
-                getSharedPreferences("MyPrefs",
+                c.getSharedPreferences("MyPrefs",
                         Context.MODE_PRIVATE);
         String l = sharedPreferences.getString("level", null);
-        if (l==null){
-            Toast.makeText(getApplicationContext(),"Loaded",Toast.LENGTH_SHORT).show();
+        if (l == null) {
+            Toast.makeText(c, "Loaded", Toast.LENGTH_SHORT).show();
         }
         return l;
     }
@@ -152,30 +173,30 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                         return;
                     }
                     //showMessage("Created a file: " + result.getDriveFile().getDriveId());
-                    startActivity(new Intent(getApplicationContext(), MainnnActivity.class));
-                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                    //c.startActivity(new Intent(c, MainnnActivity.class));
+                    Toast.makeText(c, "Success", Toast.LENGTH_SHORT).show();
                 }
             };
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mGoogleApiClient == null) {
-            // Create the API client and bind it to an instance variable.
-            // We use this instance as the callback for connection and connection
-            // failures.
-            // Since no account name is passed, the user is prompted to choose.
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_FILE)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        }
-        // Connect the client. Once connected, the camera is launched.
-        mGoogleApiClient.connect();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (mGoogleApiClient == null) {
+//            // Create the API client and bind it to an instance variable.
+//            // We use this instance as the callback for connection and connection
+//            // failures.
+//            // Since no account name is passed, the user is prompted to choose.
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addApi(Drive.API)
+//                    .addScope(Drive.SCOPE_FILE)
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .build();
+//        }
+//        // Connect the client. Once connected, the camera is launched.
+//        mGoogleApiClient.connect();
+//    }
 
     private ArrayList<PDFDoc> getPDFs()
 
@@ -210,13 +231,13 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
         return pdfDocs;
     }
 
-    @Override
-    protected void onPause() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onPause();
-    }
+//    @Override
+//    protected void onPause() {
+//        if (mGoogleApiClient != null) {
+//            mGoogleApiClient.disconnect();
+//        }
+//        super.onPause();
+//    }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -224,7 +245,7 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
         Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
         if (!result.hasResolution()) {
             // show the localized error dialog.
-            GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
+            //GoogleApiAvailability.getInstance().getErrorDialog(, result.getErrorCode(), 0).show();
             return;
         }
         // The failure has a resolution. Resolve it.
@@ -232,14 +253,13 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
         // authorization
         // dialog is displayed to the user.
         try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
+            result.startResolutionForResult((Activity) c, REQUEST_CODE_RESOLUTION);
         } catch (SendIntentException e) {
             Log.e(TAG, "Exception while starting resolution activity", e);
         }
     }
 
-    @Override
-    public void onConnected(Bundle connectionHint) {
+    public void onConnected() {
         Log.i(TAG, "API client connected.");
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
@@ -249,6 +269,7 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
 
         folder.listChildren(mGoogleApiClient)
                 .setResultCallback(metadataResult);
+        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -273,11 +294,14 @@ public class MyDriveActivity extends Activity implements ConnectionCallbacks,
                         else
                             saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName(), mime_text);
                     }
-
-                    //showMessage("Successfully listed files." + fileName.size()+"    "+result.getMetadataBuffer().getCount() +"  "+pdfDocs.size());
                 }
             };
 
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        onConnected();
+    }
 
     @Override
     public void onConnectionSuspended(int cause) {
