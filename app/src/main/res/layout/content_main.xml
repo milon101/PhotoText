@@ -7,6 +7,7 @@
     android:background="@color/colorMiddle"
     tools:context="com.tag.phototext.MainnnActivity"
     tools:showIn="@layout/activity_mainnn">
+
     <GridView
         android:id="@+id/gv"
         android:layout_width="match_parent"

@@ -15,7 +15,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +41,7 @@ public class TextViewActivity extends AppCompatActivity {
     TextToSpeech textToSpeech;
     RelativeLayout relativeLayout;
     boolean check, isCheck = false;
+    MenuItem menuItem;
 
     private SharedPreferences mSharedPreferences;
     Fragment fragment;
@@ -79,14 +79,19 @@ public class TextViewActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.textEdt:
+                        textToSpeech.stop();
+                        menuItem.setIcon(R.drawable.ic_action_speech);
+                        isCheck = false;
                         fragment = new TextEditFragment();
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction frgmentTransaction = fragmentManager.beginTransaction();
                         frgmentTransaction.replace(R.id.fragment_place, fragment);
                         frgmentTransaction.commit();
-                        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         break;
                     case R.id.textDne:
+                        textToSpeech.stop();
+                        menuItem.setIcon(R.drawable.ic_action_speech);
+                        isCheck = false;
                         if (rename.equalsIgnoreCase("Auto")) {
                             if (flag.equalsIgnoreCase("1")) {
                                 createPdf();
@@ -97,10 +102,13 @@ public class TextViewActivity extends AppCompatActivity {
                             }
                         } else {
                             startActivity(new Intent(getApplicationContext(), SaveActivity.class));
-                            Toast.makeText(getApplicationContext(),"pressed",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "pressed", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.switchImage:
+                        textToSpeech.stop();
+                        menuItem.setIcon(R.drawable.ic_action_speech);
+                        isCheck = false;
                         if (check == false) {
                             fragment = new SwitchFragmentImage();
                             FragmentManager fm = getFragmentManager();
@@ -132,6 +140,7 @@ public class TextViewActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.share_menu, menu);
+        menuItem = menu.findItem(R.id.textToSpeech);
         return true;
     }
 
@@ -139,7 +148,9 @@ public class TextViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share:
-
+                textToSpeech.stop();
+                menuItem.setIcon(R.drawable.ic_action_speech);
+                isCheck = false;
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBodyText = TextClass.stringBuilder.toString();

@@ -5,15 +5,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -46,6 +49,8 @@ public class MultipleActivity extends ActionBarActivity {
             @Override
             public void onDestroyActionMode(ActionMode arg0) {
                 gridViewAdapter.removeSelection();
+                gridViewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.model, getPDFs());
+                gridView.setAdapter(gridViewAdapter);
             }
 
             @Override
@@ -69,7 +74,7 @@ public class MultipleActivity extends ActionBarActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 for (int i = (selected.size() - 1); i >= 0; i--) {
                                     if (selected.valueAt(i)) {
-                                        PDFDoc selecteditem = gridViewAdapter.getItem(selected.keyAt(i));
+                                        PDFDoc selecteditem =(PDFDoc) gridViewAdapter.getItem(selected.keyAt(i));
                                         File file = new File(selecteditem.getPath());
                                         boolean deleted = file.delete();
                                         if (deleted) {
@@ -114,6 +119,28 @@ public class MultipleActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_multiple, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.action_search_multiple);
+        final SearchView searchViewAndroidActionBar = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        searchViewAndroidActionBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                gridViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override

@@ -15,4 +15,10 @@
     <string name="countrylabel">Country: </string>
     <string name="populationlabel">Population: </string>
     <string name="image_description">Flag</string>
+
+    <string name="menu_settings">Settings</string>
+    <string name="red_string">Select</string>
+    <string name="green_string">Drive</string>
+    <string name="yellow_string">Drive File</string>
+    <string name="blue_string">Uninstall</string>
 </resources>

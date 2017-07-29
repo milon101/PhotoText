@@ -8,79 +8,86 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class GridViewAdapter extends ArrayAdapter<PDFDoc> {
+public class GridViewAdapter extends BaseAdapter implements Filterable {
 
     Context context;
     LayoutInflater inflater;
     ArrayList<PDFDoc> pdfDocs;
+    ArrayList<PDFDoc> filterList;
+    CustomFilter filter;
     private SparseBooleanArray mSelectedItemsIds;
     int flag = 1, count = 0;
 
     public GridViewAdapter(Context context, int resourceId, ArrayList<PDFDoc> pdfDocs) {
-        super(context, resourceId, pdfDocs);
-
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.pdfDocs = pdfDocs;
+        this.filterList = pdfDocs;
         inflater = LayoutInflater.from(context);
     }
 
-    private class ViewHolder {
-        TextView nameTxt;
-        ImageView img;
-        CardView cardView;
-        View v;
-
+    @Override
+    public int getCount() {
+        return pdfDocs.size();
     }
 
-    public View getView(final int position, View view, ViewGroup parent) {
-        final ViewHolder holder;
+    @Override
+    public Object getItem(int position) {
+        return pdfDocs.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    public View getView(int position, View view, ViewGroup parent) {
+        //final ViewHolder holder;
         if (view == null) {
-
-            holder = new ViewHolder();
             view = inflater.inflate(R.layout.model, null);
-            holder.nameTxt = (TextView) view.findViewById(R.id.nameTxt);
-            holder.img = (ImageView) view.findViewById(R.id.pdfImage);
-            holder.cardView = (CardView) view.findViewById(R.id.cardView);
-
-            holder.cardView.setCardBackgroundColor(0x555535);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
         }
+
+        final TextView nameTxt = (TextView) view.findViewById(R.id.nameTxt);
+        final ImageView img = (ImageView) view.findViewById(R.id.pdfImage);
+        final CardView cardView = (CardView) view.findViewById(R.id.cardView);
+        final PDFDoc pdfDoc = (PDFDoc) this.getItem(position);
+
+        nameTxt.setText(pdfDoc.getName());
+        if (pdfDoc.getType().equalsIgnoreCase("pdf"))
+            img.setImageResource(R.drawable.lpdf_icon_updated);
+        else if (pdfDoc.getType().equalsIgnoreCase("txt"))
+            img.setImageResource(R.drawable.txt_icon_updated);
 
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (pdfDocs.get(position).getChecked()) {
-                    holder.cardView.setCardBackgroundColor(0x555535);
-                    pdfDocs.get(position).setChecked(false);
+                if (pdfDoc.getChecked()) {
+                    cardView.setCardBackgroundColor(Color.WHITE);
+                    pdfDoc.setChecked(false);
+                    return false;
+                } else {
+                    pdfDoc.setChecked(true);
+                    cardView.setCardBackgroundColor(0x555535);
+                    Toast.makeText(context, "Clicked" + getSelectedCount(), Toast.LENGTH_SHORT).show();
+
                     return false;
                 }
-                pdfDocs.get(position).setChecked(true);
-                holder.cardView.setCardBackgroundColor(Color.WHITE);
-                Toast.makeText(getContext(), "Clicked" + getSelectedCount(), Toast.LENGTH_SHORT).show();
-
-                return false;
             }
         });
 
-        holder.nameTxt.setText(pdfDocs.get(position).getName());
-        if (pdfDocs.get(position).getType().equalsIgnoreCase("pdf"))
-            holder.img.setImageResource(R.drawable.lpdf_icon_updated);
-        else if (pdfDocs.get(position).getType().equalsIgnoreCase("txt"))
-            holder.img.setImageResource(R.drawable.txt_icon_updated);
-
         return view;
     }
+
 
     public void remove(PDFDoc object) {
         pdfDocs.remove(object);
@@ -115,5 +122,46 @@ public class GridViewAdapter extends ArrayAdapter<PDFDoc> {
 
     public SparseBooleanArray getSelectedIds() {
         return mSelectedItemsIds;
+    }
+
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new CustomFilter();
+        }
+        return filter;
+    }
+
+    class CustomFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                constraint = constraint.toString().toUpperCase();
+                ArrayList<PDFDoc> filters = new ArrayList<>();
+
+                for (int i = 0; i < filterList.size(); i++) {
+                    if (filterList.get(i).getName().toUpperCase().contains(constraint)) {
+                        PDFDoc p = new PDFDoc(filterList.get(i).getName(), filterList.get(i).getPath(), filterList.get(i).getType());
+                        filters.add(p);
+                    }
+                }
+                filterResults.count = filters.size();
+                filterResults.values = filters;
+            } else {
+                filterResults.count = filterList.size();
+                filterResults.values = filterList;
+            }
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            pdfDocs = (ArrayList<PDFDoc>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

@@ -78,7 +78,6 @@
         <activity android:name=".DriveeeActivity" />
         <activity android:name=".CreateFolderActivity" />
         <activity android:name=".CreateFileInFolderActivity" />
-        <activity android:name=".MyDriveActivity" />
         <activity android:name=".ListFilesInFolderActivity" />
 
         <meta-data
