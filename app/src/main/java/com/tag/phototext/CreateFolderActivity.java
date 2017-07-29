@@ -17,9 +17,12 @@ package com.tag.phototext;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveFolder.DriveFolderResult;
@@ -28,25 +31,55 @@ import com.google.android.gms.drive.MetadataChangeSet;
 /**
  * An activity to illustrate how to create a new folder.
  */
-public class CreateFolderActivity extends BaseDemoActivity {
+public class CreateFolderActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private GoogleApiClient mGoogleApiClient;
+    Context c;
+
+    public CreateFolderActivity(Context c) {
+        this.c = c;
+        if (mGoogleApiClient == null) {
+//            // Create the API client and bind it to an instance variable.
+//            // We use this instance as the callback for connection and connection
+//            // failures.
+//            // Since no account name is passed, the user is prompted to choose.
+            mGoogleApiClient = new GoogleApiClient.Builder(c)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_FILE)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+        // Connect the client. Once connected, the camera is launched.
+        mGoogleApiClient.connect();
+    }
+
+
+    public void onConnected() {
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle("Photo Text").build();
+        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
+                mGoogleApiClient, changeSet).setResultCallback(callback);
+    }
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        super.onConnected(connectionHint);
-        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                .setTitle("Photo Text").build();
-        Drive.DriveApi.getRootFolder(getGoogleApiClient()).createFolder(
-                getGoogleApiClient(), changeSet).setResultCallback(callback);
+        onConnected();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 
     final ResultCallback<DriveFolderResult> callback = new ResultCallback<DriveFolderResult>() {
         @Override
         public void onResult(DriveFolderResult result) {
             if (!result.getStatus().isSuccess()) {
-                showMessage("Error while trying to create the folder");
+                //showMessage("Error while trying to create the folder");
                 return;
             }
-            showMessage("Created a folder: " + result.getDriveFolder().getDriveId());
+            //showMessage("Created a folder: " + result.getDriveFolder().getDriveId());
             saveData(result.getDriveFolder().getDriveId().toString());
             Log.i("Folder", result.getDriveFolder().getDriveId().toString());
         }
@@ -54,12 +87,17 @@ public class CreateFolderActivity extends BaseDemoActivity {
 
     private void saveData(String data) {
         SharedPreferences sp =
-                getSharedPreferences("MyPrefs",
+                c.getSharedPreferences("MyPrefs",
                         Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("level", data);
         editor.apply();
         editor.commit();
-        Toast.makeText(getApplicationContext(),"Shared",Toast.LENGTH_SHORT).show();
+        Toast.makeText(c, "Shared", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

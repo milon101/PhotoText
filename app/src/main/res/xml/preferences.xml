@@ -36,4 +36,24 @@
 
     </ListPreference>
 
+    <PreferenceCategory
+        android:key="pref_key_storage_settings"
+        android:title="Drive">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_auto_delete"
+            android:summary="Save in drive automatically"
+            android:title="Google Drive" />
+        <Preference
+            android:dependency="pref_key_auto_delete"
+            android:key="pref_key_sms_delete_limit"
+            android:summary="Change Account"
+            android:title="Account" />
+        <Preference
+            android:dependency="pref_key_auto_delete"
+            android:key="@string/myCoolButton"
+            android:summary="Sync now"
+            android:title="Sync" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

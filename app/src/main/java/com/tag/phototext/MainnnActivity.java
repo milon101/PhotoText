@@ -202,7 +202,8 @@ public class MainnnActivity extends AppCompatActivity {
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
                         } else if (items[item].equals("Drive")) {
-                            startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
+                            new CreateFolderActivity(getApplicationContext());
+                            //startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
                             Toast.makeText(getApplicationContext(), "Drive", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("DriveFile")) {
                             //startActivity(new Intent(getApplicationContext(), MyDriveActivity.class));

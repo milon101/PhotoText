@@ -21,4 +21,6 @@
     <string name="green_string">Drive</string>
     <string name="yellow_string">Drive File</string>
     <string name="blue_string">Uninstall</string>
+    <string name="myCoolButton">mine</string>
+    <string name="driveInit">initial</string>
 </resources>
