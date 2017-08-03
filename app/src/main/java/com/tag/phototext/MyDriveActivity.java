@@ -16,7 +16,6 @@ package com.tag.phototext;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,6 +34,7 @@ import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.DriveResource;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
 
@@ -266,12 +266,36 @@ public class MyDriveActivity implements ConnectionCallbacks,
         fileName = new ArrayList<>();
         mFolderDriveId = DriveId.decodeFromString(loadData());
         folder = mFolderDriveId.asDriveFolder();
+        folder.getMetadata(mGoogleApiClient).setResultCallback(metadataRetrievedCallback);
 
-        folder.listChildren(mGoogleApiClient)
-                .setResultCallback(metadataResult);
         Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
-
     }
+
+    final private ResultCallback<DriveResource.MetadataResult> metadataRetrievedCallback = new
+            ResultCallback<DriveResource.MetadataResult>() {
+                @Override
+                public void onResult(DriveResource.MetadataResult result) {
+                    String TAG = "hjjkjkjk";
+                    if (!result.getStatus().isSuccess()) {
+                        Log.v(TAG, "Problem while trying to fetch metadata.");
+                        return;
+                    }
+
+                    Metadata metadata = result.getMetadata();
+                    if (metadata.isTrashed()) {
+                        Log.v(TAG, "Folder is trashed");
+                        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
+                        saveData(2);
+                        new CreateFolderActivity(c);
+                    } else {
+                        folder.listChildren(mGoogleApiClient)
+                                .setResultCallback(metadataResult);
+                        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
+                        Log.v(TAG, "Folder is not trashed");
+                    }
+
+                }
+            };
 
     final private ResultCallback<DriveApi.MetadataBufferResult> metadataResult = new
             ResultCallback<DriveApi.MetadataBufferResult>() {
@@ -297,6 +321,16 @@ public class MyDriveActivity implements ConnectionCallbacks,
                 }
             };
 
+    private void saveData(int int_data) {
+        SharedPreferences sp =
+                c.getSharedPreferences("MyPrefs",
+                        Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("bool", int_data);
+        editor.apply();
+        editor.commit();
+        Toast.makeText(c, "Shared", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {

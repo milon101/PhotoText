@@ -56,10 +56,14 @@ public class CreateFolderActivity implements GoogleApiClient.ConnectionCallbacks
 
 
     public void onConnected() {
-        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                .setTitle("Photo Text").build();
-        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
-                mGoogleApiClient, changeSet).setResultCallback(callback);
+
+        if (loadData()==2) {
+            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                    .setTitle("Photo Text").build();
+            Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
+                    mGoogleApiClient, changeSet).setResultCallback(callback);
+        }else if (loadData()==1)
+            return;
     }
 
     @Override
@@ -80,20 +84,32 @@ public class CreateFolderActivity implements GoogleApiClient.ConnectionCallbacks
                 return;
             }
             //showMessage("Created a folder: " + result.getDriveFolder().getDriveId());
-            saveData(result.getDriveFolder().getDriveId().toString());
+            saveData(result.getDriveFolder().getDriveId().toString(), 1);
             Log.i("Folder", result.getDriveFolder().getDriveId().toString());
         }
     };
 
-    private void saveData(String data) {
+    private void saveData(String data, int int_data) {
         SharedPreferences sp =
                 c.getSharedPreferences("MyPrefs",
                         Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("level", data);
+        editor.putInt("bool", int_data);
         editor.apply();
         editor.commit();
         Toast.makeText(c, "Shared", Toast.LENGTH_SHORT).show();
+    }
+
+    private int loadData() {
+        SharedPreferences sharedPreferences =
+                c.getSharedPreferences("MyPrefs",
+                        Context.MODE_PRIVATE);
+        int l = sharedPreferences.getInt("bool", 2);
+        if (l == 2) {
+            Toast.makeText(c, "Loaded", Toast.LENGTH_SHORT).show();
+        }
+        return l;
     }
 
     @Override

@@ -35,6 +35,7 @@ public class SettingsFragment extends PreferenceFragment {
                 //code for what you want it to do
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     new MyDriveActivity(getContext());
+                    startActivity(new Intent(getContext(),DriveActivity.class));
                     Toast.makeText(getContext(), "DriveFile", Toast.LENGTH_SHORT).show();
                     //Toast.makeText(getContext(), "pressed", Toast.LENGTH_SHORT).show();
                 }
