@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveFolder.DriveFolderResult;
 import com.google.android.gms.drive.MetadataChangeSet;
@@ -53,7 +54,6 @@ public class CreateFolderActivity implements GoogleApiClient.ConnectionCallbacks
         // Connect the client. Once connected, the camera is launched.
         mGoogleApiClient.connect();
     }
-
 
     public void onConnected() {
 

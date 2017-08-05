@@ -4,13 +4,15 @@ package com.tag.phototext;
  * Created by MILON on 6/22/2017.
  */
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
+
+import java.io.File;
 
 public class SettingsFragment extends PreferenceFragment {
     @Override
@@ -34,8 +36,8 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 //code for what you want it to do
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    new MyDriveActivity(getContext());
-                    startActivity(new Intent(getContext(),DriveActivity.class));
+                    new MyDrive(getContext());
+                    //startActivity(new Intent(getContext(),DriveActivity.class));
                     Toast.makeText(getContext(), "DriveFile", Toast.LENGTH_SHORT).show();
                     //Toast.makeText(getContext(), "pressed", Toast.LENGTH_SHORT).show();
                 }
@@ -67,8 +69,8 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 //code for what you want it to do
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    new ReConnect(getContext());
                     Toast.makeText(getContext(), "Reconnect", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getContext(), "pressed", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }

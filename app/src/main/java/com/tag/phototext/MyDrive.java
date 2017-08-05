@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -32,6 +33,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.DriveResource;
@@ -40,6 +43,7 @@ import com.google.android.gms.drive.MetadataChangeSet;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,7 +54,7 @@ import java.util.ArrayList;
  * in Google Drive. The user is prompted with a pre-made dialog which allows
  * them to choose the file location.
  */
-public class MyDriveActivity implements ConnectionCallbacks,
+public class MyDrive implements ConnectionCallbacks,
         OnConnectionFailedListener {
 
     private static final String TAG = "drive-quickstart";
@@ -66,7 +70,7 @@ public class MyDriveActivity implements ConnectionCallbacks,
 
     private GoogleApiClient mGoogleApiClient;
 
-    public MyDriveActivity(Context c) {
+    public MyDrive(Context c) {
         this.c = c;
         if (mGoogleApiClient == null) {
 //            // Create the API client and bind it to an instance variable.
@@ -284,7 +288,6 @@ public class MyDriveActivity implements ConnectionCallbacks,
                     Metadata metadata = result.getMetadata();
                     if (metadata.isTrashed()) {
                         Log.v(TAG, "Folder is trashed");
-                        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
                         saveData(2);
                         new CreateFolderActivity(c);
                     } else {
@@ -310,10 +313,12 @@ public class MyDriveActivity implements ConnectionCallbacks,
                     for (int i = 0; i < result.getMetadataBuffer().getCount(); i++) {
                         Metadata metadata = result.getMetadataBuffer().get(i);
                         fileName.add(metadata.getTitle());
+                        File file = new File(Environment.getExternalStorageDirectory() + File.separator + metadata.getTitle());
+                        DownloadFile(metadata.getDriveId(), file);
                         //showMessage(fileName.get(i));
                     }
                     for (int i = 0; i < pdfDocs.size(); i++) {
-                        if (pdfDocs.get(i).getType().equals(".pdf"))
+                        if (pdfDocs.get(i).getType().equals("pdf"))
                             saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName(), mime_pdf);
                         else
                             saveFileToDrive(pdfDocs.get(i).getPath(), pdfDocs.get(i).getName(), mime_text);
@@ -341,4 +346,73 @@ public class MyDriveActivity implements ConnectionCallbacks,
     public void onConnectionSuspended(int cause) {
         Log.i(TAG, "GoogleApiClient connection suspended");
     }
+
+
+    public void DownloadFile(final DriveId driveId, final File filename) {
+        Toast.makeText(c, "DownloadFile", Toast.LENGTH_SHORT).show();
+        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                if (!filename.exists()) {
+                    try {
+                        filename.createNewFile();
+
+                        Toast.makeText(c, "Filecreated", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                super.onPostExecute(result);
+
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                DriveFile file = Drive.DriveApi.getFile(
+                        mGoogleApiClient, driveId);
+                file.getMetadata(mGoogleApiClient)
+                        .setResultCallback(metadataRetrieveCallback);
+                DriveApi.DriveContentsResult driveContentsResult = file.open(
+                        mGoogleApiClient,
+                        DriveFile.MODE_READ_ONLY, null).await();
+                DriveContents driveContents = driveContentsResult
+                        .getDriveContents();
+                InputStream inputstream = driveContents.getInputStream();
+
+                try {
+                    FileOutputStream fileOutput = new FileOutputStream(filename);
+
+                    byte[] buffer = new byte[1024];
+                    int bufferLength = 0;
+                    while ((bufferLength = inputstream.read(buffer)) > 0) {
+                        fileOutput.write(buffer, 0, bufferLength);
+                    }
+                    fileOutput.close();
+                    inputstream.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return true;
+            }
+
+        };
+        task.execute();
+    }
+
+    private ResultCallback<DriveResource.MetadataResult> metadataRetrieveCallback = new ResultCallback<DriveResource.MetadataResult>() {
+        @Override
+        public void onResult(DriveResource.MetadataResult result) {
+            if (!result.getStatus().isSuccess()) {
+                return;
+            }
+            Metadata metadata = result.getMetadata();
+        }
+    };
 }
