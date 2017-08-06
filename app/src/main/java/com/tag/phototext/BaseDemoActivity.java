@@ -27,7 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 
 /**
- * An abstract activity that handles authorization and connection to the Drive
+ * An abstract activity that handles authorization and connection to the DriveCreate
  * services.
  */
 public abstract class BaseDemoActivity extends Activity implements
@@ -68,7 +68,7 @@ public abstract class BaseDemoActivity extends Activity implements
     private GoogleApiClient mGoogleApiClient;
 
     /**
-     * Called when activity gets visible. A connection to Drive services need to
+     * Called when activity gets visible. A connection to DriveCreate services need to
      * be initiated as soon as the activity is visible. Registers
      * {@code ConnectionCallbacks} and {@code OnConnectionFailedListener} on the
      * activities itself.
@@ -101,7 +101,7 @@ public abstract class BaseDemoActivity extends Activity implements
     }
 
     /**
-     * Called when activity gets invisible. Connection to Drive service needs to
+     * Called when activity gets invisible. Connection to DriveCreate service needs to
      * be disconnected as soon as an activity is invisible.
      */
     @Override

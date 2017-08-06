@@ -43,7 +43,7 @@ public class ReConnect implements GoogleApiClient.ConnectionCallbacks, GoogleApi
             Toast.makeText(c, "Insert Reconnect", Toast.LENGTH_SHORT).show();
             mGoogleApiClient.clearDefaultAccountAndReconnect();
             mGoogleApiClient.disconnect();
-            mGoogleApiClient.connect();
+//            mGoogleApiClient.connect();
         }
     }
 

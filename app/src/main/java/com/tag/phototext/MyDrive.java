@@ -50,8 +50,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
- * Android Drive Quickstart activity. This activity takes a photo and saves it
- * in Google Drive. The user is prompted with a pre-made dialog which allows
+ * Android DriveCreate Quickstart activity. This activity takes a photo and saves it
+ * in Google DriveCreate. The user is prompted with a pre-made dialog which allows
  * them to choose the file location.
  */
 public class MyDrive implements ConnectionCallbacks,
@@ -85,11 +85,15 @@ public class MyDrive implements ConnectionCallbacks,
                     .build();
         }
         // Connect the client. Once connected, the camera is launched.
+
+        //Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
+
+       Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
     }
 
     /**
-     * Create a new file and save it to Drive.
+     * Create a new file and save it to DriveCreate.
      */
 
 
@@ -192,8 +196,8 @@ public class MyDrive implements ConnectionCallbacks,
 //            // failures.
 //            // Since no account name is passed, the user is prompted to choose.
 //            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addApi(Drive.API)
-//                    .addScope(Drive.SCOPE_FILE)
+//                    .addApi(DriveCreate.API)
+//                    .addScope(DriveCreate.SCOPE_FILE)
 //                    .addConnectionCallbacks(this)
 //                    .addOnConnectionFailedListener(this)
 //                    .build();
@@ -272,7 +276,6 @@ public class MyDrive implements ConnectionCallbacks,
         folder = mFolderDriveId.asDriveFolder();
         folder.getMetadata(mGoogleApiClient).setResultCallback(metadataRetrievedCallback);
 
-        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
     }
 
     final private ResultCallback<DriveResource.MetadataResult> metadataRetrievedCallback = new
@@ -339,6 +342,7 @@ public class MyDrive implements ConnectionCallbacks,
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
         onConnected();
     }
 

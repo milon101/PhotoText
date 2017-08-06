@@ -50,10 +50,12 @@ public class SettingsFragment extends PreferenceFragment {
                 //code for what you want it to do
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (driveInitial.isChecked()) {
-                        //startActivity(new Intent(getContext(), CreateFolderActivity.class));
-                        new CreateFolderActivity(getContext());
-                        Toast.makeText(getContext(), "Drive", Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(getContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                        new DriveCreate(getContext());
+                        Toast.makeText(getContext(), "DriveCreate", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (!driveInitial.isChecked()) {
+                        new ReConnect(getContext());
+                        Toast.makeText(getContext(), "DriveNot", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return true;

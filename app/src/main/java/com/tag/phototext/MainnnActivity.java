@@ -186,7 +186,7 @@ public class MainnnActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionMore:
-                final CharSequence[] items = {"Select", "Drive", "DriveFile", "List Files",
+                final CharSequence[] items = {"Select", "DriveCreate", "DriveFile", "List Files",
                         "Cancel"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainnnActivity.this);
@@ -201,10 +201,10 @@ public class MainnnActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
-                        } else if (items[item].equals("Drive")) {
+                        } else if (items[item].equals("DriveCreate")) {
                             new CreateFolderActivity(getApplicationContext());
                             //startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
-                            Toast.makeText(getApplicationContext(), "Drive", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "DriveCreate", Toast.LENGTH_SHORT).show();
                         } else if (items[item].equals("DriveFile")) {
                             //startActivity(new Intent(getApplicationContext(), MyDrive.class));
                             Bundle connectionHint = null;

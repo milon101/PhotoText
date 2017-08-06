@@ -46,8 +46,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
- * Android Drive Quickstart activity. This activity takes a photo and saves it
- * in Google Drive. The user is prompted with a pre-made dialog which allows
+ * Android DriveCreate Quickstart activity. This activity takes a photo and saves it
+ * in Google DriveCreate. The user is prompted with a pre-made dialog which allows
  * them to choose the file location.
  */
 public class DriveActivity extends Activity implements ConnectionCallbacks,
@@ -64,7 +64,7 @@ public class DriveActivity extends Activity implements ConnectionCallbacks,
     private GoogleApiClient mGoogleApiClient;
 
     /**
-     * Create a new file and save it to Drive.
+     * Create a new file and save it to DriveCreate.
      */
     private void saveFileToDrive(final String Path, final String Name) {
         // Start by creating a new contents, and setting a callback.
