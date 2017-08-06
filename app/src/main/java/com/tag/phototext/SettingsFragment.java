@@ -6,13 +6,10 @@ package com.tag.phototext;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
-
-import java.io.File;
 
 public class SettingsFragment extends PreferenceFragment {
     @Override

@@ -1,13 +1,11 @@
 package com.tag.phototext;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 
@@ -15,10 +13,8 @@ import com.google.android.gms.drive.Drive;
  * Created by MILON on 8/5/2017.
  */
 
-public class ReConnect extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ReConnect implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-
-    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 1111;
     private GoogleApiClient mGoogleApiClient;
     Context c;
 
@@ -37,13 +33,23 @@ public class ReConnect extends Activity implements GoogleApiClient.ConnectionCal
                     .addOnConnectionFailedListener(this)
                     .build();
         }
-
+        // Connect the client.
         mGoogleApiClient.connect();
     }
 
+    public void onConnected() {
+        Toast.makeText(c, "Insert Reconnect", Toast.LENGTH_SHORT).show();
+        if (mGoogleApiClient.isConnected()) {
+            Toast.makeText(c, "Insert Reconnect", Toast.LENGTH_SHORT).show();
+            mGoogleApiClient.clearDefaultAccountAndReconnect();
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+        }
+    }
+
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mGoogleApiClient.clearDefaultAccountAndReconnect();
+    public void onConnected(Bundle connectionHint) {
+        onConnected();
     }
 
     @Override
@@ -52,16 +58,7 @@ public class ReConnect extends Activity implements GoogleApiClient.ConnectionCal
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
-            } catch (IntentSender.SendIntentException e) {
-                // Unable to resolve, message user appropriately
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
-        }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }
