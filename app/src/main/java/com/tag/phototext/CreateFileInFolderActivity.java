@@ -20,12 +20,17 @@ import android.os.Bundle;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveFolder.DriveFileResult;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -50,6 +55,50 @@ public class CreateFileInFolderActivity extends BaseDemoActivity {
         Drive.DriveApi.newDriveContents(getGoogleApiClient())
                 .setResultCallback(driveContentsCallback);
 
+    }
+
+    public void searc() {
+        Query query = new Query.Builder()
+                .addFilter(Filters.and(Filters.eq(
+                        SearchableField.TITLE, "Photo Text"),
+                        Filters.eq(SearchableField.TRASHED, false)))
+                .build();
+        Drive.DriveApi.query(getGoogleApiClient(), query)
+                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            showMessage("Cannot create folder in the root.");
+                        } else {
+                            boolean isFound = false;
+                            for (Metadata m : result.getMetadataBuffer()) {
+                                if (m.getTitle().equals("MyFolder")) {
+                                    showMessage("Folder exists");
+                                    isFound = true;
+                                    break;
+                                }
+                            }
+                            if (!isFound) {
+                                showMessage("Folder not found; creating it.");
+                                MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                        .setTitle("MyFolder")
+                                        .build();
+                                Drive.DriveApi.getRootFolder(getGoogleApiClient())
+                                        .createFolder(getGoogleApiClient(), changeSet)
+                                        .setResultCallback(new ResultCallback<DriveFolder.DriveFolderResult>() {
+                                            @Override
+                                            public void onResult(DriveFolder.DriveFolderResult result) {
+                                                if (!result.getStatus().isSuccess()) {
+                                                    showMessage("Error while trying to create the folder");
+                                                } else {
+                                                    showMessage("Created a folder");
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
     }
 
     private String loadData() {

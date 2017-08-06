@@ -24,10 +24,15 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveFolder.DriveFolderResult;
+import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
 
 /**
  * An activity to illustrate how to create a new folder.
@@ -55,15 +60,68 @@ public class CreateFolderActivity implements GoogleApiClient.ConnectionCallbacks
         mGoogleApiClient.connect();
     }
 
+    public void searc(final String name) {
+        Query query = new Query.Builder()
+                .addFilter(Filters.and(Filters.eq(
+                        SearchableField.TITLE, name),
+                        Filters.eq(SearchableField.TRASHED, false)))
+                .build();
+        Drive.DriveApi.query(mGoogleApiClient, query)
+                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            showMessage("Cannot create folder in the root.");
+                        } else {
+                            boolean isFound = false;
+                            for (Metadata m : result.getMetadataBuffer()) {
+                                if (m.getTitle().equals(name)) {
+                                    showMessage("Folder exists");
+                                    isFound = true;
+                                    break;
+                                }
+                            }
+                            if (!isFound) {
+                                showMessage("Folder not found; creating it.");
+                                MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                        .setTitle(name)
+                                        .build();
+                                Drive.DriveApi.getRootFolder(mGoogleApiClient)
+                                        .createFolder(mGoogleApiClient, changeSet)
+                                        .setResultCallback(new ResultCallback<DriveFolder.DriveFolderResult>() {
+                                            @Override
+                                            public void onResult(DriveFolder.DriveFolderResult result) {
+                                                if (!result.getStatus().isSuccess()) {
+                                                    showMessage("Error while trying to create the folder");
+                                                } else {
+                                                    showMessage("Created a folder");
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void showMessage(String message) {
+        Toast.makeText(c, message, Toast.LENGTH_LONG).show();
+    }
+
+
     public void onConnected() {
 
-        if (loadData()==2) {
-            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                    .setTitle("Photo Text").build();
-            Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
-                    mGoogleApiClient, changeSet).setResultCallback(callback);
-        }else if (loadData()==1)
-            return;
+        //if (loadData() == 2) {
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle("Photo Text").build();
+        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
+                mGoogleApiClient, changeSet).setResultCallback(callback);
+        //} else if (loadData() == 1)
+        //{
+//            searc();
+        //  return;
+        //}
+        searc("Photo Text");
     }
 
     @Override
