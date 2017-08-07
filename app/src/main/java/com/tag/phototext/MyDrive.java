@@ -89,7 +89,7 @@ public class MyDrive implements ConnectionCallbacks,
         //Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
 
-       Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(c, "Connected", Toast.LENGTH_SHORT).show();
     }
 
     /**

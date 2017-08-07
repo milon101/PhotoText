@@ -44,11 +44,7 @@
             android:key="pref_key_auto_delete"
             android:summary="Save in drive automatically"
             android:title="Google Drive" />
-        <Preference
-            android:dependency="pref_key_auto_delete"
-            android:key="pref_key_sms_delete_limit"
-            android:summary="Change Account"
-            android:title="Account" />
+
         <Preference
             android:dependency="pref_key_auto_delete"
             android:key="@string/myCoolButton"

@@ -4,6 +4,7 @@ package com.tag.phototext;
  * Created by MILON on 6/22/2017.
  */
 
+import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -33,10 +34,16 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 //code for what you want it to do
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    new MyDrive(getContext());
-                    //startActivity(new Intent(getContext(),DriveActivity.class));
+                    new DriveSync(getContext());
+//                    Notification notification = new Notification(R.drawable.ic_action_ocr,
+//                            "Syncing",
+//                            System.currentTimeMillis());
+//                    notification.flags |= Notification.FLAG_NO_CLEAR
+//                            | Notification.FLAG_ONGOING_EVENT;
+//                    NotificationManager notifier = (NotificationManager)
+//                            getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//                    notifier.notify(1, notification);
                     Toast.makeText(getContext(), "DriveFile", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getContext(), "pressed", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -44,7 +51,9 @@ public class SettingsFragment extends PreferenceFragment {
 
         final CheckBoxPreference driveInitial = (CheckBoxPreference) findPreference("pref_key_auto_delete");
 
-        driveInitial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        driveInitial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+
+        {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 //code for what you want it to do
@@ -52,8 +61,7 @@ public class SettingsFragment extends PreferenceFragment {
                     if (driveInitial.isChecked()) {
                         new DriveCreate(getContext());
                         Toast.makeText(getContext(), "DriveCreate", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (!driveInitial.isChecked()) {
+                    } else if (!driveInitial.isChecked()) {
                         new ReConnect(getContext());
                         Toast.makeText(getContext(), "DriveNot", Toast.LENGTH_SHORT).show();
                     }
@@ -61,19 +69,6 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
-
-        Preference reConnect = findPreference("pref_key_sms_delete_limit");
-        reConnect.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //code for what you want it to do
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    new ReConnect(getContext());
-                    Toast.makeText(getContext(), "Reconnect", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-        });
-
     }
+
 }

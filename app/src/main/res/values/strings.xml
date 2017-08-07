@@ -24,4 +24,5 @@
     <string name="myCoolButton">mine</string>
     <string name="driveInit">initial</string>
     <string name="title_preferences">Preferences</string>
+    <string name="name_of_your_app">Photo Text</string>
 </resources>
