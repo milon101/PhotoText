@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
@@ -72,7 +73,7 @@ public class DriveSync extends BaseDemoActivity {
     }
 
     public void searc(final String name) {
-        Query query = new Query.Builder()
+        final Query query = new Query.Builder()
                 .addFilter(Filters.and(Filters.eq(
                         SearchableField.TITLE, name),
                         Filters.eq(SearchableField.TRASHED, false)))
@@ -81,9 +82,11 @@ public class DriveSync extends BaseDemoActivity {
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
                     public void onResult(DriveApi.MetadataBufferResult result) {
+//                        result = Drive.DriveApi.query(mGoogleApiClient, query).await();
                         if (!result.getStatus().isSuccess()) {
                             showMessag("Cannot create folder in the root.");
                         } else {
+
                             boolean isFound = false;
                             for (Metadata m : result.getMetadataBuffer()) {
                                 if (m.getTitle().equals(name)) {
@@ -136,8 +139,10 @@ public class DriveSync extends BaseDemoActivity {
                     for (int i = 0; i < result.getMetadataBuffer().getCount(); i++) {
                         Metadata metadata = result.getMetadataBuffer().get(i);
                         fileName.add(metadata.getTitle());
+
                         File file = new File(Environment.getExternalStorageDirectory() + File.separator + "Photo Text" + File.separator + metadata.getTitle());
-                        DownloadFile(metadata.getDriveId(), file);
+                        File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "Photo Text");
+                        DownloadFile(metadata.getDriveId(), file, folder);
                         //showMessag(metadata.getTitle());
                     }
                     for (j = 0; j < pdfDocs.size(); j++) {
@@ -157,13 +162,17 @@ public class DriveSync extends BaseDemoActivity {
 
             };
 
-    public void DownloadFile(final DriveId driveId, final File filename) {
+    public void DownloadFile(final DriveId driveId, final File filename, final File fileFolder) {
         Toast.makeText(context, "DownloadFile", Toast.LENGTH_SHORT).show();
         AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                if (!fileFolder.exists()){
+                        fileFolder.mkdir();
+                }
+
                 if (!filename.exists()) {
                     try {
                         filename.createNewFile();
@@ -308,7 +317,15 @@ public class DriveSync extends BaseDemoActivity {
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
         fileName = new ArrayList<>();
-        searc("Photo Text");
+
+        Drive.DriveApi.requestSync(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                //search query performs here
+                searc("Photo Text");
+            }
+        });
+
     }
 
 
