@@ -16,5 +16,6 @@ public class TextClass {
     static int cropSize;
 //    static String MineID;
     static ArrayList<String> name;
+    static String filepath;
 
 }

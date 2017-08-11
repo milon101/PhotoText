@@ -42,7 +42,8 @@ public class TextViewActivity extends AppCompatActivity {
     RelativeLayout relativeLayout;
     boolean check, isCheck = false;
     MenuItem menuItem;
-
+    File file;
+    boolean aBoolean;
     private SharedPreferences mSharedPreferences;
     Fragment fragment;
 
@@ -59,7 +60,7 @@ public class TextViewActivity extends AppCompatActivity {
             name = TextClass.stringBuilder.toString().substring(0, 5);
         flag = mSharedPreferences.getString("outputType", "1");
         rename = mSharedPreferences.getString("rename", "1");
-
+        aBoolean = mSharedPreferences.getBoolean("keepPhoto", false);
         if (!TextClass.stringBuilder.toString().isEmpty())
             textView.setText(TextClass.stringBuilder.toString());
         else
@@ -92,6 +93,8 @@ public class TextViewActivity extends AppCompatActivity {
                         textToSpeech.stop();
                         menuItem.setIcon(R.drawable.ic_action_speech);
                         isCheck = false;
+                        if (!aBoolean)
+                        fileDelete(TextClass.filepath);
                         if (rename.equalsIgnoreCase("Auto")) {
                             if (flag.equalsIgnoreCase("1")) {
                                 createPdf();
@@ -217,10 +220,25 @@ public class TextViewActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(),
                     "Done writing SD 'mysdfile.txt'",
                     Toast.LENGTH_SHORT).show();
+
+//            Toast.makeText(getBaseContext(), "Deleted" +
+//                    fileDelete(TextClass.filepath), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void fileDelete(String path) {
+        File fdelete = new File(path);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                Toast.makeText(getApplicationContext(), "file Deleted :" + path, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "file not Deleted :" + path, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 }

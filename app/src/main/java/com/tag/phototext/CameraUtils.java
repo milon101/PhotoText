@@ -44,6 +44,7 @@ public class CameraUtils {
 
     private Context mApplication;
     private Camera mCamera;
+    File file;
     int i = 0;
     /**
      * This flag tells weather the camera preview is running or stopped
@@ -136,7 +137,8 @@ public class CameraUtils {
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
-                TextClass.sUri = Uri.fromFile(new File(path));
+                file = new File(path);
+                TextClass.sUri = Uri.fromFile(file);
                 Log.w(LOGTAG, "onPictureTaken: " + TextClass.sUri);
                 fos.close();
                 startCropper(REQUEST_CAMERA, TextClass.sUri);
@@ -173,6 +175,7 @@ public class CameraUtils {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mApplication.startActivity(intent);
+        TextClass.filepath = uri.getPath();
 
         Log.w(LOGTAG, "Uri Found starto");
 
@@ -320,7 +323,9 @@ public class CameraUtils {
     @SuppressLint("SimpleDateFormat")
     private File getOutputMediaFile(int type) {
 
-        File mediaStorageDir = getFileStorageDir(mApplication, "Layout_test");
+        File mediaStorageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+        );
 
         /*
          *  Create the storage directory if it does not exist

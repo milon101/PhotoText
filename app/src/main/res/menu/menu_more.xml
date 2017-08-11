@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/actionMore"
-        android:icon="@android:drawable/ic_menu_more"
+        android:icon="@android:drawable/ic_menu_delete"
         android:title="More"
         app:showAsAction="always">
 

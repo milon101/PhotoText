@@ -12,26 +12,34 @@
         android:id="@+id/gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_nav"
+        android:layout_above="@+id/mainn_linear"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
 
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_nav"
+    <LinearLayout
+        android:id="@+id/mainn_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"
-        app:itemBackground="@color/colorBottom"
-        app:itemIconTint="@drawable/nav_item_color_state"
-        app:itemTextColor="#FFFFFF"
-        app:menu="@menu/bottom_navigation_menu"></android.support.design.widget.BottomNavigationView>
+        android:background="@color/colorBottom">
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            app:itemBackground="@color/colorBottom"
+            app:itemIconTint="@drawable/nav_item_color_state"
+            app:itemTextColor="#FFFFFF"
+            app:menu="@menu/bottom_navigation_menu"></android.support.design.widget.BottomNavigationView>
+
+    </LinearLayout>
 
 
 </RelativeLayout>

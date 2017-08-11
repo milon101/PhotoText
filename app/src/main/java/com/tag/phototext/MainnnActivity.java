@@ -17,13 +17,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
@@ -186,50 +183,13 @@ public class MainnnActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionMore:
-                final CharSequence[] items = {"Select", "DriveCreate", "DriveFile", "List Files",
-                        "Cancel"};
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainnnActivity.this);
-                builder.setTitle("Add Photo!");
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-                        boolean result = Utility.checkPermission(MainnnActivity.this);
-
-                        if (items[item].equals("Select")) {
-                            startActivity(new Intent(getApplicationContext(), MultipleActivity.class));
-                            Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
-                        } else if (items[item].equals("Cancel")) {
-                            dialog.dismiss();
-                        } else if (items[item].equals("DriveCreate")) {
-                            new CreateFolderActivity(getApplicationContext());
-                            //startActivity(new Intent(getApplicationContext(), CreateFolderActivity.class));
-                            Toast.makeText(getApplicationContext(), "DriveCreate", Toast.LENGTH_SHORT).show();
-                        } else if (items[item].equals("DriveFile")) {
-                            //startActivity(new Intent(getApplicationContext(), MyDrive.class));
-                            Bundle connectionHint = null;
-                            new MyDrive(getApplicationContext());
-                            Toast.makeText(getApplicationContext(), "DriveFile", Toast.LENGTH_SHORT).show();
-
-                        } else if (items[item].equals("List Files")) {
-                            startActivity(new Intent(getApplicationContext(), ListFilesInFolderActivity.class));
-                            Toast.makeText(getApplicationContext(), "ListFile", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                WindowManager.LayoutParams abc = dialog.getWindow().getAttributes();
-                abc.width = WindowManager.LayoutParams.MATCH_PARENT;
-                abc.gravity = Gravity.TOP | Gravity.LEFT;
-                abc.x = 100;   //x position
-                abc.y = 100;   //y position
-                dialog.show();
-                return true;
-
+                startActivity(new Intent(getApplicationContext(), MultipleActivity.class));
+                Toast.makeText(getApplicationContext(), "Menu", Toast.LENGTH_SHORT).show();
+                break;
             default:
-                return super.onOptionsItemSelected(item);
+                return false;
         }
+        return false;
     }
 
     private ArrayList<PDFDoc> getPDFs()

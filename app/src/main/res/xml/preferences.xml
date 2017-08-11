@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@array/type_lists"
-        android:entryValues="@array/type_lists_value"
-        android:key="outputType"
-        android:summary="Select an output type"
-        android:title="Output type"></ListPreference>
+    <PreferenceCategory android:title="General">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/type_lists"
+            android:entryValues="@array/type_lists_value"
+            android:key="outputType"
+            android:summary="Select an output type"
+            android:title="Output type"></ListPreference>
 
-    <ListPreference
-        android:defaultValue="3"
-        android:entries="@array/gridValues"
-        android:entryValues="@array/gridValues"
-        android:key="gridValues"
-        android:summary="No. of items in a row"
-        android:title="Items in a row"></ListPreference>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="keepPhoto"
+            android:title="Keep the photo"></SwitchPreference>
 
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@array/rename"
-        android:entryValues="@array/rename"
-        android:key="rename"
-        android:summary="Rename with first five digit or manual"
-        android:title="Rename">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/rename"
+            android:entryValues="@array/rename"
+            android:key="rename"
+            android:summary="Rename with first five digit or manual"
+            android:title="Rename">
 
-    </ListPreference>
+        </ListPreference>
 
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@array/camera"
-        android:entryValues="@array/camera"
-        android:key="camera"
-        android:summary="Start with camera or previous page"
-        android:title="Start Page">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/camera"
+            android:entryValues="@array/camera"
+            android:key="camera"
+            android:summary="Start with camera or previous page"
+            android:title="Start Page">
 
-    </ListPreference>
+        </ListPreference>
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="pref_key_storage_settings"

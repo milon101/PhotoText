@@ -161,14 +161,14 @@ public class CropActivity extends Activity {
                         mCropLayout.setOutputFormat(outputFormat);
                         break;
 
-                    case R.id.brightness:
-                        BrightnessFragment crimeFragment = new BrightnessFragment();
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        BrightnessFragment hello = new BrightnessFragment();
-                        fragmentTransaction.add(R.id.cropActivity, hello, "HELLO");
-                        fragmentTransaction.commit();
-                        break;
+//                    case R.id.brightness:
+//                        BrightnessFragment crimeFragment = new BrightnessFragment();
+//                        FragmentManager fragmentManager = getFragmentManager();
+//                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                        BrightnessFragment hello = new BrightnessFragment();
+//                        fragmentTransaction.add(R.id.cropActivity, hello, "HELLO");
+//                        fragmentTransaction.commit();
+//                        break;
                 }
                 return true;
             }

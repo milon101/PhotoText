@@ -10,8 +10,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorMiddle"
-        android:layout_above="@+id/l_layout">
+        android:layout_above="@+id/l_layout"
+        android:background="@color/colorMiddle">
 
         <ImageView
             android:id="@+id/imgView"
@@ -25,20 +25,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorBottom"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="@color/colorBottom">
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_nav_ocr2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:itemTextColor="#FFFFFF"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
             app:itemBackground="@color/colorBottom"
             app:itemIconTint="@drawable/nav_item_color_state"
+            app:itemTextColor="#FFFFFF"
             app:menu="@menu/ocr2_menu"></android.support.design.widget.BottomNavigationView>
     </LinearLayout>
 

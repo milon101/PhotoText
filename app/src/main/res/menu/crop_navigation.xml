@@ -24,12 +24,6 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/brightness"
-        android:icon="@drawable/ic_action_brighyness"
-        android:title="Brightness"
-        app:showAsAction="always"></item>
-
-    <item
         android:id="@+id/cropDone"
         android:enabled="true"
         android:icon="@drawable/ic_action_donee"
