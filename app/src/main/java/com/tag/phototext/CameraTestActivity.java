@@ -200,6 +200,7 @@ public class CameraTestActivity extends AppCompatActivity {
         mCamUtils.handleFlipVisibility();
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.surface_float_test);
+        floatingActionButton.bringToFront();
         floatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

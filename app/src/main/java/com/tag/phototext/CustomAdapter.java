@@ -73,7 +73,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
         ImageView img = (ImageView) view.findViewById(R.id.pdfImage);
 
         //BIND DATA
-        nameTxt.setText(pdfDoc.getName());
+        nameTxt.setText(pdfDoc.getName().substring(0, pdfDoc.getName().lastIndexOf(".")));
         if (pdfDoc.getType().equalsIgnoreCase("pdf"))
             img.setImageResource(R.drawable.lpdf_icon_updated);
         else if (pdfDoc.getType().equalsIgnoreCase("txt"))
@@ -93,6 +93,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
             public boolean onLongClick(final View v) {
                 final CharSequence[] items = {"View", "Rename", "Delete", "Share",
                         "Cancel"};
+                //Toast.makeText(c,pdfDoc.getName().substring(0, pdfDoc.getName().lastIndexOf(".")),Toast.LENGTH_SHORT).show();
 
                 firstDialogBuilder = new AlertDialog.Builder(c);
                 firstDialogBuilder.setTitle(nameTxt.getText().toString());

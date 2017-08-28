@@ -41,7 +41,7 @@ public class CreateFolderActivity implements GoogleApiClient.ConnectionCallbacks
 
     private GoogleApiClient mGoogleApiClient;
     Context c;
-
+    public CreateFolderActivity(){}
     public CreateFolderActivity(Context c) {
         this.c = c;
         if (mGoogleApiClient == null) {

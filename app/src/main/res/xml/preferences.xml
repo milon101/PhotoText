@@ -19,7 +19,7 @@
             android:entries="@array/rename"
             android:entryValues="@array/rename"
             android:key="rename"
-            android:summary="Rename with first five digit or manual"
+            android:summary="Rename with first five charachter or manual"
             android:title="Rename">
 
         </ListPreference>
@@ -29,7 +29,7 @@
             android:entries="@array/camera"
             android:entryValues="@array/camera"
             android:key="camera"
-            android:summary="Start with camera or previous page"
+            android:summary="Start with camera or vault"
             android:title="Start Page">
 
         </ListPreference>

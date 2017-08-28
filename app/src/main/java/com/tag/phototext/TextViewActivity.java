@@ -59,7 +59,7 @@ public class TextViewActivity extends AppCompatActivity {
         if (!TextClass.stringBuilder.toString().isEmpty())
             name = TextClass.stringBuilder.toString().substring(0, 5);
         flag = mSharedPreferences.getString("outputType", "1");
-        rename = mSharedPreferences.getString("rename", "1");
+        rename = mSharedPreferences.getString("rename", "Auto");
         aBoolean = mSharedPreferences.getBoolean("keepPhoto", false);
         if (!TextClass.stringBuilder.toString().isEmpty())
             textView.setText(TextClass.stringBuilder.toString());
@@ -90,11 +90,15 @@ public class TextViewActivity extends AppCompatActivity {
                         frgmentTransaction.commit();
                         break;
                     case R.id.textDne:
+                        if (TextClass.stringBuilder.toString().isEmpty()) {
+                            startActivity(new Intent(getApplicationContext(), CameraTestActivity.class));
+                            break;
+                        }
                         textToSpeech.stop();
                         menuItem.setIcon(R.drawable.ic_action_speech);
                         isCheck = false;
                         if (!aBoolean)
-                        fileDelete(TextClass.filepath);
+                            fileDelete(TextClass.filepath);
                         if (rename.equalsIgnoreCase("Auto")) {
                             if (flag.equalsIgnoreCase("1")) {
                                 createPdf();
@@ -142,8 +146,10 @@ public class TextViewActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.share_menu, menu);
-        menuItem = menu.findItem(R.id.textToSpeech);
+        if (!TextClass.stringBuilder.toString().isEmpty()) {
+            getMenuInflater().inflate(R.menu.share_menu, menu);
+            menuItem = menu.findItem(R.id.textToSpeech);
+        }
         return true;
     }
 
@@ -205,6 +211,11 @@ public class TextViewActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, Ocr2.class));
+    }
 
     private void writeToFile(String data, Context context) {
         try {

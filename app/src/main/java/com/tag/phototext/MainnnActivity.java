@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,8 +42,7 @@ public class MainnnActivity extends AppCompatActivity {
     CustomAdapter customAdapter;
     Context context;
     private SharedPreferences mSharedPreferences, sharedPreferences;
-    String flag, flag1;
-    int num;
+    String flag1;
     ArrayList<PDFDoc> pdfDocs;
 
     @Override
@@ -56,12 +56,16 @@ public class MainnnActivity extends AppCompatActivity {
         pdfDocs = new ArrayList<PDFDoc>();
         pdfDocs = getPDFs();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        flag = mSharedPreferences.getString("gridValues", "1");
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         flag1 = sharedPreferences.getString("camera", "1");
-        num = Integer.parseInt(flag);
-        gv.setNumColumns(num);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        if (height < 1300)
+            gv.setNumColumns(4);
+        Toast.makeText(getApplicationContext(), "Screen Height" + height + width, Toast.LENGTH_SHORT).show();
         gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,

@@ -2,13 +2,14 @@ package com.tag.phototext;
 
 public class PDFDoc {
     String name, path, type;
-    Boolean checked=false;
+    Boolean checked;
     private String num;
 
     public PDFDoc(String name, String path, String type) {
         this.name = name;
         this.path = path;
         this.type = type;
+        this.checked = false;
     }
 
     public void setType(String type) {

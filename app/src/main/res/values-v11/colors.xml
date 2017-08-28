@@ -10,11 +10,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGray">#004D40</color>
-    <color name="colorBottomm">#39796B</color>
-    <color name="colorAppbarr">#00251A</color>
-    <color name="colorMiddlee">#004D40</color>
+    <color name="colorBottom">#39796B</color>
+    <color name="colorAppbar">#00251A</color>
+    <color name="colorMiddle">#004D40</color>
 
-    <color name="colorAppbar">#0B2C2C</color>
-    <color name="colorBottom">#608281</color>
-    <color name="colorMiddle">#355555</color>
+    <color name="colorAppbarr">#0B2C2C</color>
+    <color name="colorBottomm">#608281</color>
+    <color name="colorMiddlee">#355555</color>
 </resources>

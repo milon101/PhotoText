@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/mainn_linear"
         android:gravity="center"
-        android:horizontalSpacing="10dp"
+        android:horizontalSpacing="20dp"
         android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />

@@ -40,7 +40,7 @@ public class SplashScreen extends AppCompatActivity {
 
     private void checkRunTimePermission() {
         String[] permissionArrays = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE};
+                Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE};
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permissionArrays, 11111);
@@ -79,8 +79,6 @@ public class SplashScreen extends AppCompatActivity {
 
             if (isPermitted)
                 next();
-//                if (isPermissionFromGallery)
-//                    openGalleryFragment();
         }
     }
 

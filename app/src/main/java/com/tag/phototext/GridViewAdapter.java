@@ -61,11 +61,27 @@ public class GridViewAdapter extends BaseAdapter implements Filterable {
         final CardView cardView = (CardView) view.findViewById(R.id.cardView);
         final PDFDoc pdfDoc = (PDFDoc) this.getItem(position);
 
-        nameTxt.setText(pdfDoc.getName());
+        nameTxt.setText(pdfDoc.getName().substring(0, pdfDoc.getName().lastIndexOf(".")));
         if (pdfDoc.getType().equalsIgnoreCase("pdf"))
             img.setImageResource(R.drawable.lpdf_icon_updated);
         else if (pdfDoc.getType().equalsIgnoreCase("txt"))
             img.setImageResource(R.drawable.txt_icon_updated);
+
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (pdfDoc.getChecked()) {
+//                    cardView.setCardBackgroundColor(Color.WHITE);
+//                    pdfDoc.setChecked(false);
+//                    return;
+//                } else {
+//                    pdfDoc.setChecked(true);
+//                    cardView.setCardBackgroundColor(0x555535);
+//                    Toast.makeText(context, "Clicked" + getSelectedCount(), Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//            }
+//        });
 
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override

@@ -3,10 +3,12 @@ package com.tag.phototext;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -27,16 +30,21 @@ public class MultipleActivity extends ActionBarActivity {
 
     GridView gridView;
     GridViewAdapter gridViewAdapter;
+    ArrayList<PDFDoc> pdfDocs;
     AlertDialog.Builder alertDialog;
-
+    CardView cardView1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activityyy_main);
         gridView = (GridView) findViewById(R.id.gridViewMultiple);
         gridViewAdapter = new GridViewAdapter(this, R.layout.model, getPDFs());
+        pdfDocs = getPDFs();
         gridView.setAdapter(gridViewAdapter);
         gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        View view = getLayoutInflater().inflate(R.layout.model, null);
+        cardView1 = (CardView) view.findViewById(R.id.cardView);
 
         gridView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
@@ -74,7 +82,7 @@ public class MultipleActivity extends ActionBarActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 for (int i = (selected.size() - 1); i >= 0; i--) {
                                     if (selected.valueAt(i)) {
-                                        PDFDoc selecteditem =(PDFDoc) gridViewAdapter.getItem(selected.keyAt(i));
+                                        PDFDoc selecteditem = (PDFDoc) gridViewAdapter.getItem(selected.keyAt(i));
                                         File file = new File(selecteditem.getPath());
                                         boolean deleted = file.delete();
                                         if (deleted) {
@@ -110,12 +118,26 @@ public class MultipleActivity extends ActionBarActivity {
                 mode.setTitle(checkedCount + " Selected");
                 gridViewAdapter.toggleSelection(position);
             }
+
+
         });
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 gridView.setItemChecked(position, true);
+//                final PDFDoc pdfDoc = (PDFDoc) pdfDocs.get(position);
+//
+//                if (pdfDoc.getChecked()) {
+//                    cardView1.setCardBackgroundColor(Color.WHITE);
+//                    pdfDoc.setChecked(false);
+//                    return;
+//                } else {
+//                    pdfDoc.setChecked(true);
+//                    cardView1.setCardBackgroundColor(0x555535);
+//                    Toast.makeText(getApplicationContext(), "Clicked" + gridViewAdapter.getSelectedCount(), Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
             }
         });
 
@@ -167,14 +189,14 @@ public class MultipleActivity extends ActionBarActivity {
                 File file = files[i];
 
                 if (file.getPath().endsWith("pdf")) {
-                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"pdf");
+                    pdfDoc = new PDFDoc(file.getName(), file.getAbsolutePath(), "pdf");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("pdf");
 
                     pdfDocs.add(pdfDoc);
                 } else if (file.getPath().endsWith("txt")) {
-                    pdfDoc = new PDFDoc(file.getName(),file.getAbsolutePath(),"txt");
+                    pdfDoc = new PDFDoc(file.getName(), file.getAbsolutePath(), "txt");
                     pdfDoc.setName(file.getName());
                     pdfDoc.setPath(file.getAbsolutePath());
                     pdfDoc.setType("txt");
